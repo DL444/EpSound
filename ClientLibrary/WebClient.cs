@@ -21,7 +21,7 @@ namespace ClientLibrary
         public async Task<string> GetTrackListContent(string parameters = "/browse_data/?&moods=Moods.Hopeful&active=moods&activeFilter=energy")
         {
 
-            HttpResponseMessage message = await httpClient.GetAsync(HttpUtility.UrlEncode(parameters));
+            HttpResponseMessage message = await httpClient.GetAsync(parameters);
             return await message.Content.ReadAsStringAsync();
         }
     }
@@ -84,6 +84,124 @@ namespace ClientLibrary
                 tracks.Add(track);
             }
             return tracks;
+        }
+
+        public static List<FilterParameter> GetFilterParameters(string filterlist)
+        {
+            List<FilterParameter> parameters = new List<FilterParameter>();
+            string det = @"<div class=""visible-desktop"">";
+            int startIndex = filterlist.IndexOf(det);
+            int detLength = det.Length;
+            string subStr = filterlist.Substring(startIndex + detLength);
+            startIndex = subStr.IndexOf(det);
+            subStr = subStr.Substring(startIndex);
+
+            int layer = 0;
+            for(int i = 0; i < subStr.Length; i++)
+            {
+                if(subStr[i] == '<')
+                {
+                    if(subStr.Substring(i, 4) == "<div")
+                    {
+                        layer++;
+                        i += 3;
+                    }
+                    else if(subStr.Substring(i, 5) == "</div")
+                    {
+                        layer--;
+                        i += 4;
+                    }
+                }
+                if(layer == 0)
+                {
+                    subStr = subStr.Remove(i + 1);
+                    break;
+                }
+            }
+
+            Regex tagRegex = new Regex(@"<a class="".*?"" tag=""(.*?)"" tagType=""moods"".*?>(.*?)</a>", RegexOptions.Singleline);
+            MatchCollection matches = tagRegex.Matches(subStr);
+            foreach(Match match in matches)
+            {
+                string tag = match.Groups[1].Value;
+                switch(tag.Split('.')[0])
+                {
+                    case "Moods":
+                        MoodParameter pMood = new MoodParameter();
+                        pMood.Tag = tag;
+                        pMood.DisplayName = match.Groups[2].Value.Trim();
+                        parameters.Add(pMood);
+                        break;
+                    case "Movement":
+                        MovementParameter pMove = new MovementParameter();
+                        pMove.Tag = tag;
+                        pMove.DisplayName = match.Groups[2].Value;
+                        parameters.Add(pMove);
+                        break;
+                    case "Settings":
+                        SettingParameter pSet = new SettingParameter();
+                        pSet.Tag = tag;
+                        pSet.DisplayName = match.Groups[2].Value;
+                        parameters.Add(pSet);
+                        break;
+                }
+            }
+
+            tagRegex = new Regex(@"<a class="".*?"" tag=""(.*?)"" tagType=""(energyLevel|tempo|trackLength)"".*?>(.*?)</a>");
+            matches = tagRegex.Matches(subStr);
+            foreach(Match match in matches)
+            {
+                switch(match.Groups[2].Value)
+                {
+                    case "energyLevel":
+                        EnergyParameter pEnergy = new EnergyParameter();
+                        pEnergy.Tag = match.Groups[1].Value;
+                        pEnergy.DisplayName = match.Groups[3].Value;
+                        parameters.Add(pEnergy);
+                        break;
+                    case "tempo":
+                        TempoParameter pTempo = new TempoParameter();
+                        pTempo.Tag = match.Groups[1].Value;
+                        pTempo.DisplayName = match.Groups[3].Value;
+                        parameters.Add(pTempo);
+                        break;
+                    case "trackLength":
+                        LengthParameter pLength = new LengthParameter();
+                        pLength.Tag = match.Groups[1].Value;
+                        pLength.DisplayName = match.Groups[3].Value;
+                        parameters.Add(pLength);
+                        break;
+                }
+            }
+
+            det = @"<ul class=""col col-genre"">";
+            subStr = subStr.Substring(subStr.IndexOf(det));
+
+            tagRegex = new Regex(@"<a class=[""'].*?[""'] tag=[""'](.*?)[""'] tagType=[""'](fatherGenres|genres)[""'].*?>(.*?)</a>", RegexOptions.Singleline);
+            matches = tagRegex.Matches(subStr);
+            GenreParameter prevGenre = null;
+            foreach (Match match in matches)
+            {
+                switch (match.Groups[2].Value)
+                {
+                    case "fatherGenres":
+                        if(match.Groups[3].Value == "All") { continue; }
+                        prevGenre = new GenreParameter();
+                        prevGenre.Tag = match.Groups[1].Value;
+                        prevGenre.DisplayName = GetUnbracketedString(match.Groups[3].Value);
+                        parameters.Add(prevGenre);
+                        break;
+                    case "genres":
+                        SubgenreParameter pSubgen = new SubgenreParameter();
+                        pSubgen.ParentGenre = prevGenre;
+                        pSubgen.Tag = match.Groups[1].Value;
+                        pSubgen.DisplayName = match.Groups[3].Value;
+                        parameters.Add(pSubgen);
+                        break;
+                }
+            }
+
+            return parameters;
         }
 
         static string GetUnbracketedString(string original, bool trim = true)

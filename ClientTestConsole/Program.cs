@@ -10,7 +10,7 @@ namespace ClientTestConsole
         {
             var client = new ClientLibrary.ESWebClient();
             string cont = client.GetTrackListContent().GetAwaiter().GetResult();
-            List<Track> tracks = ClientLibrary.ContentFormatter.GetTracks(cont);
+            List<FilterParameter> tracks = ClientLibrary.ContentFormatter.GetFilterParameters(cont);
             foreach(var t in tracks)
             {
                 Console.WriteLine(t);

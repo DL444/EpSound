@@ -52,6 +52,11 @@ namespace ClientLibrary
         {
             return $"&{TagType}={Tag}";
         }
+
+        public override string ToString()
+        {
+            return $"{TagType}: {DisplayName}";
+        }
     }
 
     public class MoodParameterBase : FilterParameter
