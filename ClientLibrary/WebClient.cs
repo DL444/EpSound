@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,7 +12,7 @@ namespace ClientLibrary
 {
     public class ESWebClient
     {
-        HttpClient httpClient;
+        readonly HttpClient httpClient;
 
         public ESWebClient(string baseUri = "https://player.epidemicsound.com")
         {
@@ -35,12 +36,18 @@ namespace ClientLibrary
 
         public async Task<string> GetTrackInfoContent(int streamId)
         {
-            //var request = new HttpRequestMessage(HttpMethod.Get, $"/track_url/{streamId}/?context=%2Fbrowse%2F");
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/track_url/{streamId}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"/track_url/{streamId}");
             request.Headers.Add("x-requested-with", "XMLHttpRequest");
             HttpResponseMessage message = await httpClient.SendAsync(request);
             return await message.Content.ReadAsStringAsync();
         }
+
+        public async Task<Stream> GetTrackStream(TrackInfo info)
+        {
+            HttpResponseMessage message = await httpClient.GetAsync(new Uri(info.FileUri, UriKind.Absolute));
+            return await message.Content.ReadAsStreamAsync();
+        }
+
     }
 
 
@@ -263,8 +270,14 @@ namespace ClientLibrary
                                     info.HasMelody = true;
                                     break;
                                 case "vocalsStreamingTrackId":
-                                    info.VocalStreamId = jsonReader.ReadAsInt32() ?? -1;
+                                    info.VocalsStreamId = jsonReader.ReadAsInt32() ?? -1;
                                     info.HasVocals = true;
+                                    break;
+                                case "s3TrackId":
+                                    info.UriStreamId = jsonReader.ReadAsInt32() ?? -1;
+                                    break;
+                                case "track_url":
+                                    info.FileUri = jsonReader.ReadAsString();
                                     break;
                             }
                         }

@@ -1,6 +1,7 @@
 ﻿using ClientLibrary;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ClientTestConsole
 {
@@ -25,7 +26,14 @@ namespace ClientTestConsole
             //}
 
             string infoJson = client.GetTrackInfoContent(161846).GetAwaiter().GetResult();
-            ContentFormatter.GetTrackInfo(infoJson);
+            var info = ContentFormatter.GetTrackInfo(infoJson);
+            using (Stream mp3stream = client.GetTrackStream(info).GetAwaiter().GetResult())
+            {
+                using (FileStream fileStr = File.Create("C:\\Test\\test.mp3"))
+                {
+                    mp3stream.CopyTo(fileStr);
+                }
+            }
         }
     }
 }

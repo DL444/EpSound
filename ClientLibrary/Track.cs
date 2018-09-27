@@ -38,16 +38,39 @@ namespace ClientLibrary
         public bool HasMelody { get; set; }
         public int MelodyStreamId { get; set; }
         public bool HasVocals { get; set; }
-        public int VocalStreamId { get; set; }
+        public int VocalsStreamId { get; set; }
+
+        public string FileUri { get; set; }
+        public int UriStreamId { get; set; }
 
         public override string ToString()
         {
             return Title;
+        }
+
+        public TrackInfoType TrackInfoType
+        {
+            get
+            {
+                if(UriStreamId == -1) { return TrackInfoType.Unknown; }
+                if(UriStreamId == FullStreamId) { return TrackInfoType.FullMix; }
+                if(UriStreamId == BassStreamId) { return TrackInfoType.Bass; }
+                if(UriStreamId == DrumsStreamId) { return TrackInfoType.Drums; }
+                if(UriStreamId == InstrumentsStreamId) { return TrackInfoType.Instruments; }
+                if(UriStreamId == MelodyStreamId) { return TrackInfoType.Melody; }
+                if(UriStreamId == VocalsStreamId) { return TrackInfoType.Vocals; }
+                return TrackInfoType.Unknown;
+            }
         }
     }
 
     public enum Energy
     {
         Low, Medium, High
+    }
+
+    public enum TrackInfoType
+    {
+        FullMix, Bass, Drums, Instruments, Melody, Vocals, Unknown
     }
 }
