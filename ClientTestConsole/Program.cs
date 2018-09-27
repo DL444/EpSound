@@ -35,12 +35,13 @@ namespace ClientTestConsole
             //    }
             //}
 
-            string cont = client.GetSimilarListContent(161846).GetAwaiter().GetResult();
-            List<Track> tracks = ClientLibrary.ContentFormatter.GetTracks(cont);
-            foreach (var t in tracks)
-            {
-                Console.WriteLine(t);
-            }
+            //string cont = client.GetSimilarListContent(161846).GetAwaiter().GetResult();
+            string cont = client.GetFullSearchListContent("Young").GetAwaiter().GetResult();
+            //List<Track> tracks = ClientLibrary.ContentFormatter.GetTracks(cont);
+            //foreach (var t in tracks)
+            //{
+            //    Console.WriteLine(t);
+            //}
         }
     }
 }

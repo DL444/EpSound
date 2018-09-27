@@ -6,7 +6,7 @@ namespace ClientLibrary
 {
     public class FilterParameterManager
     {
-        List<FilterParameter> parameters = new List<FilterParameter>();
+        readonly List<FilterParameter> parameters = new List<FilterParameter>();
 
         public FilterParameterManager() { }
 

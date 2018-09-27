@@ -53,6 +53,18 @@ namespace ClientLibrary
             HttpResponseMessage message = await httpClient.GetAsync($"/template/similar/{streamId}");
             return await message.Content.ReadAsStringAsync();
         }
+
+        public async Task<string> GetSearchListContent(string term)
+        {
+            HttpResponseMessage message = await httpClient.GetAsync($"/template/search/?search_query={HttpUtility.UrlEncode(term)}");
+            return await message.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> GetFullSearchListContent(string term, int page = 1)
+        {
+            HttpResponseMessage message = await httpClient.GetAsync($"/json/search/tracks/?order=asc&page={page}&sort=relevance&term={HttpUtility.UrlEncode(term)}");
+            return await message.Content.ReadAsStringAsync();
+        }
     }
 
 
@@ -291,6 +303,11 @@ namespace ClientLibrary
             }
 
             return info;
+        }
+
+        public static List<Track> GetFullSearchResultTracks(string searchList)
+        {
+            throw new NotImplementedException();
         }
 
         static string GetUnbracketedString(string original, bool trim = true)
