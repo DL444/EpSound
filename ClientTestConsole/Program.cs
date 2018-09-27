@@ -42,6 +42,7 @@ namespace ClientTestConsole
 
             var l = ContentFormatter.GetFullSearchResultTracks(cont, out results, out pages);
             l.ForEach(x => Console.WriteLine(x));
+            Console.WriteLine($"{results} in {pages}");
             //List<Track> tracks = ClientLibrary.ContentFormatter.GetTracks(cont);
             //foreach (var t in tracks)
             //{
