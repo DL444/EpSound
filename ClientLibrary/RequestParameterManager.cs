@@ -8,6 +8,13 @@ namespace ClientLibrary
     {
         List<FilterParameter> parameters = new List<FilterParameter>();
 
+        public FilterParameterManager() { }
+
+        public FilterParameterManager(IEnumerable<FilterParameter> parameters)
+        {
+            this.parameters = new List<FilterParameter>(parameters);
+        }
+
         public FilterParameter this[int index] => parameters[index];
         public void Add(FilterParameter parameter)
         {

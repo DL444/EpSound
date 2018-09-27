@@ -21,6 +21,31 @@ namespace ClientLibrary
         }
     }
 
+    public class TrackInfo
+    {
+        public int DbId { get; set; }
+        public string Title { get; set; }
+        public string Authors { get; set; }
+        public int Length { get; set; }
+
+        public int FullStreamId { get; set; }
+        public bool HasBass { get; set; }
+        public int BassStreamId { get; set; }
+        public bool HasDrums { get; set; }
+        public int DrumsStreamId { get; set; }
+        public bool HasInstruments { get; set; }
+        public int InstrumentsStreamId { get; set; }
+        public bool HasMelody { get; set; }
+        public int MelodyStreamId { get; set; }
+        public bool HasVocals { get; set; }
+        public int VocalStreamId { get; set; }
+
+        public override string ToString()
+        {
+            return Title;
+        }
+    }
+
     public enum Energy
     {
         Low, Medium, High

@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace ClientLibrary
 {
@@ -18,10 +19,26 @@ namespace ClientLibrary
             httpClient.BaseAddress = new Uri(baseUri);
         }
 
-        public async Task<string> GetTrackListContent(string parameters = "/browse_data/?&moods=Moods.Hopeful&active=moods&activeFilter=energy")
+        public async Task<string> GetTrackListContent(IEnumerable<FilterParameter> filterParameters)
         {
+            FilterParameterManager manager = new FilterParameterManager(filterParameters);
+            string paramStr = "/browse_data/?" + manager.GetRequestString();
+            HttpResponseMessage message = await httpClient.GetAsync(paramStr);
+            return await message.Content.ReadAsStringAsync();
+        }
 
-            HttpResponseMessage message = await httpClient.GetAsync(parameters);
+        public async Task<string> GetFilterListContent()
+        {
+            HttpResponseMessage message = await httpClient.GetAsync("/browse_data/?");
+            return await message.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> GetTrackInfoContent(int streamId)
+        {
+            //var request = new HttpRequestMessage(HttpMethod.Get, $"/track_url/{streamId}/?context=%2Fbrowse%2F");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/track_url/{streamId}");
+            request.Headers.Add("x-requested-with", "XMLHttpRequest");
+            HttpResponseMessage message = await httpClient.SendAsync(request);
             return await message.Content.ReadAsStringAsync();
         }
     }
@@ -202,6 +219,60 @@ namespace ClientLibrary
             }
 
             return parameters;
+        }
+
+        public static TrackInfo GetTrackInfo(string uriInfo)
+        {
+            TrackInfo info = new TrackInfo();
+            using (System.IO.StringReader strReader = new System.IO.StringReader(uriInfo))
+            {
+                using (JsonTextReader jsonReader = new JsonTextReader(strReader))
+                {
+                    while(jsonReader.Read())
+                    {
+                        if(jsonReader.TokenType == JsonToken.PropertyName && jsonReader.Value is string str)
+                        {
+                            switch(str)
+                            {
+                                case "dbPrimaryKey":
+                                    info.DbId = jsonReader.ReadAsInt32() ?? -1;
+                                    break;
+                                case "title":
+                                    info.Title = jsonReader.ReadAsString();
+                                    break;
+                                case "length":
+                                    info.Length = jsonReader.ReadAsInt32() ?? -1;
+                                    break;
+                                case "fullmixTrackId":
+                                    info.FullStreamId = jsonReader.ReadAsInt32() ?? -1;
+                                    break;
+                                case "bassStreamingTrackId":
+                                    info.BassStreamId = jsonReader.ReadAsInt32() ?? -1;
+                                    info.HasBass = true;
+                                    break;
+                                case "drumsStreamingTrackId":
+                                    info.DrumsStreamId = jsonReader.ReadAsInt32() ?? -1;
+                                    info.HasDrums = true;
+                                    break;
+                                case "instrumentsStreamingTrackId":
+                                    info.InstrumentsStreamId = jsonReader.ReadAsInt32() ?? -1;
+                                    info.HasInstruments = true;
+                                    break;
+                                case "melodyStreamingTrackId":
+                                    info.MelodyStreamId = jsonReader.ReadAsInt32() ?? -1;
+                                    info.HasMelody = true;
+                                    break;
+                                case "vocalsStreamingTrackId":
+                                    info.VocalStreamId = jsonReader.ReadAsInt32() ?? -1;
+                                    info.HasVocals = true;
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return info;
         }
 
         static string GetUnbracketedString(string original, bool trim = true)
