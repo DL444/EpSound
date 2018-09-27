@@ -245,10 +245,10 @@ namespace ClientLibrary
             return parameters;
         }
 
-        public static TrackInfo GetTrackInfo(string uriInfo)
+        public static TrackInfo GetTrackInfo(string trackInfo)
         {
             TrackInfo info = new TrackInfo();
-            using (System.IO.StringReader strReader = new System.IO.StringReader(uriInfo))
+            using (System.IO.StringReader strReader = new System.IO.StringReader(trackInfo))
             {
                 using (JsonTextReader jsonReader = new JsonTextReader(strReader))
                 {
@@ -294,6 +294,12 @@ namespace ClientLibrary
                                     break;
                                 case "track_url":
                                     info.FileUri = jsonReader.ReadAsString();
+                                    break;
+                                case "albums":
+                                    while(jsonReader.TokenType != JsonToken.EndObject)
+                                    {
+                                        jsonReader.Read();
+                                    }
                                     break;
                             }
                         }

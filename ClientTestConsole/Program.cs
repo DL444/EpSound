@@ -25,8 +25,8 @@ namespace ClientTestConsole
             //    Console.WriteLine(t);
             //}
 
-            //string infoJson = client.GetTrackInfoContent(161846).GetAwaiter().GetResult();
-            //var info = ContentFormatter.GetTrackInfo(infoJson);
+            string infoJson = client.GetTrackInfoContent(103824).GetAwaiter().GetResult();
+            var info = ContentFormatter.GetTrackInfo(infoJson);
             //using (Stream mp3stream = client.GetTrackStream(info).GetAwaiter().GetResult())
             //{
             //    using (FileStream fileStr = File.Create("C:\\Test\\test.mp3"))
@@ -36,13 +36,13 @@ namespace ClientTestConsole
             //}
 
             //string cont = client.GetSimilarListContent(161846).GetAwaiter().GetResult();
-            string cont = client.GetFullSearchListContent("Young").GetAwaiter().GetResult();
+            //string cont = client.GetFullSearchListContent("Young").GetAwaiter().GetResult();
 
-            int pages = 0; int results = 0;
+            //int pages = 0; int results = 0;
 
-            var l = ContentFormatter.GetFullSearchResultTracks(cont, out results, out pages);
-            l.ForEach(x => Console.WriteLine(x));
-            Console.WriteLine($"{results} in {pages}");
+            //var l = ContentFormatter.GetFullSearchResultTracks(cont, out results, out pages);
+            //l.ForEach(x => Console.WriteLine(x));
+            //Console.WriteLine($"{results} in {pages}");
             //List<Track> tracks = ClientLibrary.ContentFormatter.GetTracks(cont);
             //foreach (var t in tracks)
             //{
