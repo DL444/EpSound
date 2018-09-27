@@ -37,7 +37,11 @@ namespace ClientTestConsole
 
             //string cont = client.GetSimilarListContent(161846).GetAwaiter().GetResult();
             string cont = client.GetFullSearchListContent("Young").GetAwaiter().GetResult();
-            ContentFormatter.GetFullSearchResultTracks(cont);
+
+            int pages = 0; int results = 0;
+
+            var l = ContentFormatter.GetFullSearchResultTracks(cont, out results, out pages);
+            l.ForEach(x => Console.WriteLine(x));
             //List<Track> tracks = ClientLibrary.ContentFormatter.GetTracks(cont);
             //foreach (var t in tracks)
             //{

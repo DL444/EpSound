@@ -304,26 +304,29 @@ namespace ClientLibrary
             return info;
         }
 
-        public static List<Track> GetFullSearchResultTracks(string searchList)
+        public static List<Track> GetFullSearchResultTracks(string searchList, out int resultCount, out int pageCount)
         {
             List<Track> tracks = new List<Track>();
+            resultCount = -1;
+            pageCount = -1;
 
             using (StringReader strReader = new StringReader(searchList))
             {
                 using (JsonTextReader jsonReader = new JsonTextReader(strReader))
                 {
+                    jsonReader.Read();
                     while (jsonReader.Read())
                     {
-                        if(jsonReader.TokenType == JsonToken.StartObject)
+                        if (jsonReader.TokenType == JsonToken.StartObject)
                         {
                             Track track = new Track();
                             string mainArtist = "";
                             string featArtist = "";
                             while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndObject)
                             {
-                                if(jsonReader.TokenType == JsonToken.PropertyName)
+                                if (jsonReader.TokenType == JsonToken.PropertyName)
                                 {
-                                    switch((string)jsonReader.Value)
+                                    switch ((string)jsonReader.Value)
                                     {
                                         case "id":
                                             track.StreamId = jsonReader.ReadAsInt32() ?? -1;
@@ -333,15 +336,15 @@ namespace ClientLibrary
                                             break;
                                         case "genres":
                                             jsonReader.Read();
-                                            if(jsonReader.TokenType == JsonToken.String)
+                                            if (jsonReader.TokenType == JsonToken.String)
                                             {
                                                 track.Genres = (string)jsonReader.Value;
                                                 break;
                                             }
-                                            else if(jsonReader.TokenType == JsonToken.StartArray)
+                                            else if (jsonReader.TokenType == JsonToken.StartArray)
                                             {
                                                 track.Genres = jsonReader.ReadAsString();
-                                                while(jsonReader.TokenType != JsonToken.EndArray)
+                                                while (jsonReader.TokenType != JsonToken.EndArray)
                                                 {
                                                     jsonReader.Read();
                                                 }
@@ -370,12 +373,12 @@ namespace ClientLibrary
                                             break;
                                         case "energyLevel":
                                             string energyStr = jsonReader.ReadAsString();
-                                            if(energyStr == null) { track.Energy = Energy.Medium; }
-                                            else if(string.Compare(energyStr, "medium", true) == 0)
+                                            if (energyStr == null) { track.Energy = Energy.Medium; }
+                                            else if (string.Compare(energyStr, "medium", true) == 0)
                                             {
                                                 track.Energy = Energy.Medium;
                                             }
-                                            else if(string.Compare(energyStr, "high", true) == 0)
+                                            else if (string.Compare(energyStr, "high", true) == 0)
                                             {
                                                 track.Energy = Energy.High;
                                             }
@@ -393,15 +396,33 @@ namespace ClientLibrary
                                         case "featuredArtistName":
                                             featArtist = jsonReader.ReadAsString();
                                             break;
+                                        case "composerName":
+                                            if(string.IsNullOrEmpty(mainArtist))
+                                            {
+                                                mainArtist = jsonReader.ReadAsString();
+                                            }
+                                            break;
                                     }
                                 }
                             }
-                            if(!string.IsNullOrEmpty(featArtist))
+                            if (!string.IsNullOrEmpty(featArtist))
                             {
                                 mainArtist += $" feat. {featArtist}";
                             }
                             track.Authors = mainArtist;
                             tracks.Add(track);
+                        }
+                        else if (jsonReader.TokenType == JsonToken.PropertyName)
+                        {
+                            string propName = (string)jsonReader.Value;
+                            if (propName == "totalHits")
+                            {
+                                resultCount = jsonReader.ReadAsInt32() ?? -1;
+                            }
+                            else if(propName == "totalPages")
+                            {
+                                pageCount = jsonReader.ReadAsInt32() ?? -1;
+                            }
                         }
                     }
                 }
