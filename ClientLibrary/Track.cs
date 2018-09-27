@@ -7,7 +7,7 @@ namespace ClientLibrary
         public int StreamId { get; set; }
         public string Title { get; set; }
         public string Authors { get; set; }
-        public string Genre { get; set; }
+        public string Genres { get; set; }
         public string Category { get; set; }
         public int Bpm { get; set; }
         public Energy Energy { get; set; }
@@ -36,7 +36,6 @@ namespace ClientLibrary
         public bool HasMelody { get; set; }
         public int MelodyStreamId { get; set; }
         public bool HasVocals { get; set; }
-        public int VocalsStreamId { get; set; }
 
         public string FileUri { get; set; }
         public int UriStreamId { get; set; }
@@ -56,7 +55,6 @@ namespace ClientLibrary
                 if(UriStreamId == DrumsStreamId) { return TrackInfoType.Drums; }
                 if(UriStreamId == InstrumentsStreamId) { return TrackInfoType.Instruments; }
                 if(UriStreamId == MelodyStreamId) { return TrackInfoType.Melody; }
-                if(UriStreamId == VocalsStreamId) { return TrackInfoType.Vocals; }
                 return TrackInfoType.Unknown;
             }
         }
@@ -69,6 +67,6 @@ namespace ClientLibrary
 
     public enum TrackInfoType
     {
-        FullMix, Bass, Drums, Instruments, Melody, Vocals, Unknown
+        FullMix, Bass, Drums, Instruments, Melody, Unknown
     }
 }

@@ -94,7 +94,7 @@ namespace ClientLibrary
                             track.Authors = GetUnbracketedString(authorCellValue);
                             break;
                         case 1:
-                            track.Genre = GetUnbracketedString(cellMatches[i].Value);
+                            track.Genres = GetUnbracketedString(cellMatches[i].Value);
                             break;
                         case 2:
                             track.Category = GetUnbracketedString(cellMatches[i].Value);
@@ -286,9 +286,8 @@ namespace ClientLibrary
                                     info.MelodyStreamId = jsonReader.ReadAsInt32() ?? -1;
                                     info.HasMelody = true;
                                     break;
-                                case "vocalsStreamingTrackId":
-                                    info.VocalsStreamId = jsonReader.ReadAsInt32() ?? -1;
-                                    info.HasVocals = true;
+                                case "hasVocals":
+                                    info.HasVocals = jsonReader.ReadAsBoolean() ?? false;
                                     break;
                                 case "s3TrackId":
                                     info.UriStreamId = jsonReader.ReadAsInt32() ?? -1;
@@ -307,7 +306,107 @@ namespace ClientLibrary
 
         public static List<Track> GetFullSearchResultTracks(string searchList)
         {
-            throw new NotImplementedException();
+            List<Track> tracks = new List<Track>();
+
+            using (StringReader strReader = new StringReader(searchList))
+            {
+                using (JsonTextReader jsonReader = new JsonTextReader(strReader))
+                {
+                    while (jsonReader.Read())
+                    {
+                        if(jsonReader.TokenType == JsonToken.StartObject)
+                        {
+                            Track track = new Track();
+                            string mainArtist = "";
+                            string featArtist = "";
+                            while (jsonReader.Read() && jsonReader.TokenType != JsonToken.EndObject)
+                            {
+                                if(jsonReader.TokenType == JsonToken.PropertyName)
+                                {
+                                    switch((string)jsonReader.Value)
+                                    {
+                                        case "id":
+                                            track.StreamId = jsonReader.ReadAsInt32() ?? -1;
+                                            break;
+                                        case "title":
+                                            track.Title = jsonReader.ReadAsString();
+                                            break;
+                                        case "genres":
+                                            jsonReader.Read();
+                                            if(jsonReader.TokenType == JsonToken.String)
+                                            {
+                                                track.Genres = (string)jsonReader.Value;
+                                                break;
+                                            }
+                                            else if(jsonReader.TokenType == JsonToken.StartArray)
+                                            {
+                                                track.Genres = jsonReader.ReadAsString();
+                                                while(jsonReader.TokenType != JsonToken.EndArray)
+                                                {
+                                                    jsonReader.Read();
+                                                }
+                                                break;
+                                            }
+                                            break;
+                                        case "moods":
+                                            jsonReader.Read();
+                                            if (jsonReader.TokenType == JsonToken.String)
+                                            {
+                                                track.Category = (string)jsonReader.Value;
+                                                break;
+                                            }
+                                            else if (jsonReader.TokenType == JsonToken.StartArray)
+                                            {
+                                                track.Category = jsonReader.ReadAsString();
+                                                while (jsonReader.TokenType != JsonToken.EndArray)
+                                                {
+                                                    jsonReader.Read();
+                                                }
+                                                break;
+                                            }
+                                            break;
+                                        case "bpm":
+                                            track.Bpm = jsonReader.ReadAsInt32() ?? -1;
+                                            break;
+                                        case "energyLevel":
+                                            string energyStr = jsonReader.ReadAsString();
+                                            if(energyStr == null) { track.Energy = Energy.Medium; }
+                                            else if(string.Compare(energyStr, "medium", true) == 0)
+                                            {
+                                                track.Energy = Energy.Medium;
+                                            }
+                                            else if(string.Compare(energyStr, "high", true) == 0)
+                                            {
+                                                track.Energy = Energy.High;
+                                            }
+                                            else
+                                            {
+                                                track.Energy = Energy.Low;
+                                            }
+                                            break;
+                                        case "added":
+                                            track.ReleaseDate = DateTime.Parse(jsonReader.ReadAsString());
+                                            break;
+                                        case "artistName":
+                                            mainArtist = jsonReader.ReadAsString();
+                                            break;
+                                        case "featuredArtistName":
+                                            featArtist = jsonReader.ReadAsString();
+                                            break;
+                                    }
+                                }
+                            }
+                            if(!string.IsNullOrEmpty(featArtist))
+                            {
+                                mainArtist += $" feat. {featArtist}";
+                            }
+                            track.Authors = mainArtist;
+                            tracks.Add(track);
+                        }
+                    }
+                }
+            }
+            return tracks;
         }
 
         static string GetUnbracketedString(string original, bool trim = true)
