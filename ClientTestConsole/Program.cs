@@ -25,14 +25,21 @@ namespace ClientTestConsole
             //    Console.WriteLine(t);
             //}
 
-            string infoJson = client.GetTrackInfoContent(161846).GetAwaiter().GetResult();
-            var info = ContentFormatter.GetTrackInfo(infoJson);
-            using (Stream mp3stream = client.GetTrackStream(info).GetAwaiter().GetResult())
+            //string infoJson = client.GetTrackInfoContent(161846).GetAwaiter().GetResult();
+            //var info = ContentFormatter.GetTrackInfo(infoJson);
+            //using (Stream mp3stream = client.GetTrackStream(info).GetAwaiter().GetResult())
+            //{
+            //    using (FileStream fileStr = File.Create("C:\\Test\\test.mp3"))
+            //    {
+            //        mp3stream.CopyTo(fileStr);
+            //    }
+            //}
+
+            string cont = client.GetSimilarListContent(161846).GetAwaiter().GetResult();
+            List<Track> tracks = ClientLibrary.ContentFormatter.GetTracks(cont);
+            foreach (var t in tracks)
             {
-                using (FileStream fileStr = File.Create("C:\\Test\\test.mp3"))
-                {
-                    mp3stream.CopyTo(fileStr);
-                }
+                Console.WriteLine(t);
             }
         }
     }

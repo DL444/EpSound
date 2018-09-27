@@ -48,6 +48,11 @@ namespace ClientLibrary
             return await message.Content.ReadAsStreamAsync();
         }
 
+        public async Task<string> GetSimilarListContent(int streamId)
+        {
+            HttpResponseMessage message = await httpClient.GetAsync($"/template/similar/{streamId}");
+            return await message.Content.ReadAsStringAsync();
+        }
     }
 
 
