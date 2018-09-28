@@ -66,6 +66,12 @@ namespace ClientLibrary
         }
     }
 
+    public sealed class PlaceholderParameter : FilterParameter
+    {
+        public override string TagType => "";
+        public override string GetRequestString() => "";
+    }
+
     public class MoodParameterBase : FilterParameter
     {
         public override string TagType => "moods";
