@@ -63,13 +63,38 @@ namespace EpSound
             {
                 prevTag = "";
                 FilterPaneVisibility = Visibility.Collapsed;
-                SelectIndicatorColor = Colors.Transparent;
+                SetSelectPipeColor(prevTag);
             }
             else
             {
                 prevTag = tag;
                 FilterPaneVisibility = Visibility.Visible;
-                SelectIndicatorColor = Colors.Blue;
+                SetSelectPipeColor(prevTag);
+            }
+        }
+
+        void SetSelectPipeColor(string tag)
+        {
+            switch (tag)
+            {
+                case "":
+                    SelectIndicatorColor = Colors.Transparent;
+                    break;
+                case "Genres":
+                    SelectIndicatorColor = (Color)Resources["GenresColor"];
+                    break;
+                case "Moods":
+                    SelectIndicatorColor = (Color)Resources["MoodsColor"];
+                    break;
+                case "Movement":
+                    SelectIndicatorColor = (Color)Resources["MovementColor"];
+                    break;
+                case "Places":
+                    SelectIndicatorColor = (Color)Resources["PlacesColor"];
+                    break;
+                case "Misc":
+                    SelectIndicatorColor = (Color)Resources["MiscColor"];
+                    break;
             }
         }
     }
@@ -83,7 +108,7 @@ namespace EpSound
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return !(bool)value;
+            return Convert(value, targetType, parameter, language);
         }
     }
 
@@ -97,8 +122,8 @@ namespace EpSound
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            Visibility visibility = (Visibility)value;
-            return visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            return Convert(value, targetType, parameter, language);
         }
     }
+
 }

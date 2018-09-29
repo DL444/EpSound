@@ -15,14 +15,19 @@
     <Page.Resources>
         <local:InvertBoolConverter x:Key="InvertBoolConverter"/>
         <local:InvertVisibilityConverter x:Key="InvertVisibilityConverter"/>
+        <Color x:Key="GenresColor">#3559A1</Color>
+        <Color x:Key="MoodsColor">#FFB450</Color>
+        <Color x:Key="MovementColor">#EB2D46</Color>
+        <Color x:Key="PlacesColor">#028193</Color>
+        <Color x:Key="MiscColor">#4B0082</Color>
+        <SolidColorBrush x:Key="GenresBrush" Color="{StaticResource GenresColor}"/>
+        <SolidColorBrush x:Key="MoodsBrush" Color="{StaticResource MoodsColor}"/>
+        <SolidColorBrush x:Key="MovementBrush" Color="{StaticResource MovementColor}"/>
+        <SolidColorBrush x:Key="PlacesBrush" Color="{StaticResource PlacesColor}"/>
+        <SolidColorBrush x:Key="MiscBrush" Color="{StaticResource MiscColor}"/>
     </Page.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <!--<RowDefinition Height="Auto"/>-->
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
         <Grid>
             <StackPanel>
                 <Rectangle Fill="Blue" Height="100" Width="100"/>
@@ -48,7 +53,6 @@
             </Grid>
         </Grid>
 
-        <!--<controls:DropShadowPanel ShadowOpacity="0.3" BlurRadius="60">-->
         <ui:NavigationView IsSettingsVisible="False" PaneDisplayMode="Top" HorizontalAlignment="Stretch" VerticalAlignment="Top" ItemInvoked="NavigationView_ItemInvoked">
             <ui:NavigationView.Resources>
                 <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="{x:Bind SelectIndicatorColor, Mode=OneWay}"/>
@@ -92,6 +96,5 @@
                 </animation:Implicit.HideAnimations>
             </Frame>
         </ui:NavigationView>
-        <!--</controls:DropShadowPanel>-->
     </Grid>
 </Page>
