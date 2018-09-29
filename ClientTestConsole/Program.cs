@@ -25,8 +25,9 @@ namespace ClientTestConsole
             //    Console.WriteLine(t);
             //}
 
-            string infoJson = client.GetTrackInfoContent(103824).GetAwaiter().GetResult();
+            string infoJson = client.GetTrackInfoContent(207980).GetAwaiter().GetResult();
             var info = ContentFormatter.GetTrackInfo(infoJson);
+            Console.WriteLine(info.Title);
             //using (Stream mp3stream = client.GetTrackStream(info).GetAwaiter().GetResult())
             //{
             //    using (FileStream fileStr = File.Create("C:\\Test\\test.mp3"))

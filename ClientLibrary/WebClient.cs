@@ -300,10 +300,7 @@ namespace ClientLibrary
                                     info.FileUri = jsonReader.ReadAsString();
                                     break;
                                 case "albums":
-                                    while(jsonReader.TokenType != JsonToken.EndObject)
-                                    {
-                                        jsonReader.Read();
-                                    }
+                                    jsonReader.Skip();
                                     break;
                             }
                         }
