@@ -44,6 +44,10 @@ namespace ClientLibrary
 
         public async Task<Stream> GetTrackStream(TrackInfo info)
         {
+            if(info.FileUri == null)
+            {
+                throw new TrackNotFoundException($"{info.Title} not found.");
+            }
             HttpResponseMessage message = await httpClient.GetAsync(new Uri(info.FileUri, UriKind.Absolute));
             return await message.Content.ReadAsStreamAsync();
         }
@@ -453,5 +457,16 @@ namespace ClientLibrary
             }
             return builder.ToString();
         }
+    }
+
+    public class TrackNotFoundException : Exception
+    {
+        public TrackNotFoundException() : base() { }
+
+        protected TrackNotFoundException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+
+        public TrackNotFoundException(string message) : base(message) { }
+
+        public TrackNotFoundException(string message, Exception innerException) : base(message, innerException) { }
     }
 }
