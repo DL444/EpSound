@@ -26,6 +26,8 @@ namespace EpSound.ViewModel
         public FilterTagType TagType { get; private set; }
         public string DisplayName => Parameter.DisplayName;
 
+        public bool IsEnabled { get; set; }
+
         public FilterParamViewModel() : this(new PlaceholderParameter()) { }
         public FilterParamViewModel(FilterParameter param)
         {

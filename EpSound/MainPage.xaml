@@ -5,10 +5,93 @@
     xmlns:local="using:EpSound"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:animation="using:Microsoft.Toolkit.Uwp.UI.Animations"
+    xmlns:ui="using:Microsoft.UI.Xaml.Controls"
+    xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Page.Resources>
+        <local:InvertBoolConverter x:Key="InvertBoolConverter"/>
+        <local:InvertVisibilityConverter x:Key="InvertVisibilityConverter"/>
+    </Page.Resources>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <!--<RowDefinition Height="Auto"/>-->
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <StackPanel>
+                <Rectangle Fill="Blue" Height="100" Width="100"/>
+                <Rectangle Fill="Red" Height="100" Width="100"/>
+                <Rectangle Fill="Green" Height="100" Width="100"/>
+                <Rectangle Fill="Yellow" Height="100" Width="100"/>
+                <Rectangle Fill="Teal" Height="100" Width="100"/>
+                <Rectangle Fill="Indigo" Height="100" Width="100"/>
+            </StackPanel>
+            <Grid>
+                <Border Visibility="{x:Bind FilterPaneVisibility, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <animation:Implicit.ShowAnimations>
+                        <animation:OpacityAnimation To="1" Duration="0:0:0.3"/>
+                    </animation:Implicit.ShowAnimations>
+                    <animation:Implicit.HideAnimations>
+                        <animation:OpacityAnimation To="0" Duration="0:0:0.3"/>
+                    </animation:Implicit.HideAnimations>
+                    
+                    <Border.Background>
+                        <media:BackdropBlurBrush Amount="5"/>
+                    </Border.Background>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!--<controls:DropShadowPanel ShadowOpacity="0.3" BlurRadius="60">-->
+        <ui:NavigationView IsSettingsVisible="False" PaneDisplayMode="Top" HorizontalAlignment="Stretch" VerticalAlignment="Top" ItemInvoked="NavigationView_ItemInvoked">
+            <ui:NavigationView.Resources>
+                <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="{x:Bind SelectIndicatorColor, Mode=OneWay}"/>
+            </ui:NavigationView.Resources>
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Icon="Audio" Content="Genres" Tag="Genres"/>
+                <ui:NavigationViewItem Content="Moods" Tag="Moods">
+                    <ui:NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE706;"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Movement" Tag="Movement">
+                    <ui:NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xF61F;"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Places" Tag="Places">
+                    <ui:NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE731;"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItemSeparator/>
+                <ui:NavigationViewItem Content="Miscellaneous" Tag="Misc">
+                    <ui:NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE9E9;"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+
+            <ui:NavigationView.AutoSuggestBox>
+                <AutoSuggestBox QueryIcon="Find" Width="200" PlaceholderText="Search tracks"/>
+            </ui:NavigationView.AutoSuggestBox>
+
+
+            <Frame Height="400" Background="{ThemeResource NavigationViewTopPaneBackground}" Visibility="{x:Bind FilterPaneVisibility, Mode=OneWay}">
+                <animation:Implicit.ShowAnimations>
+                    <animation:TranslationAnimation From="0,-400,0" To="0" Duration="0:0:0.3"/>
+                </animation:Implicit.ShowAnimations>
+                <animation:Implicit.HideAnimations>
+                    <animation:TranslationAnimation From="0" To="0,-400,0" Duration="0:0:0.1"/>
+                </animation:Implicit.HideAnimations>
+            </Frame>
+        </ui:NavigationView>
+        <!--</controls:DropShadowPanel>-->
     </Grid>
 </Page>
