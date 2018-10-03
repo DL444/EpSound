@@ -97,6 +97,17 @@ namespace EpSound
                     break;
             }
         }
+
+        private void NavigationViewItem_LosingFocus(UIElement sender, LosingFocusEventArgs args)
+        {
+            if(args.NewFocusedElement is Microsoft.UI.Xaml.Controls.NavigationViewItem)
+            {
+                return;
+            }
+            prevTag = "";
+            FilterPaneVisibility = Visibility.Collapsed;
+            SetSelectPipeColor(prevTag);
+        }
     }
 
     public class InvertBoolConverter : IValueConverter
