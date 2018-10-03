@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Globalization.DateTimeFormatting;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -100,13 +101,27 @@ namespace EpSound
 
         private void NavigationViewItem_LosingFocus(UIElement sender, LosingFocusEventArgs args)
         {
-            if(args.NewFocusedElement is Microsoft.UI.Xaml.Controls.NavigationViewItem)
+            if(args.NewFocusedElement is UI.NavigationViewItem)
             {
                 return;
             }
             prevTag = "";
             FilterPaneVisibility = Visibility.Collapsed;
             SetSelectPipeColor(prevTag);
+        }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            // TODO: Remove test code.
+            TrackListView.DataContext = await ViewModel.ModelVmAdapter.Test();
+        }
+
+        private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            if(!string.IsNullOrEmpty(args.QueryText))
+            {
+                TrackListView.DataContext = await ViewModel.ModelVmAdapter.SearchAll(args.QueryText);
+            }
         }
     }
 
@@ -137,4 +152,45 @@ namespace EpSound
         }
     }
 
+    public class DateDisplayConverter : IValueConverter
+    {
+        static DateTimeFormatter formatter = new DateTimeFormatter("shortdate");
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return formatter.Format((DateTime)value);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            return DateTime.Parse((string)value);
+        }
+    }
+
+    public class EnergyBrushConverter : IValueConverter
+    {
+        static Page mainPage;
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if(mainPage == null)
+            {
+                mainPage = (Window.Current.Content as Frame).Content as Page;
+            }
+            ClientLibrary.Energy energy = (ClientLibrary.Energy)value;
+            if (energy == ClientLibrary.Energy.Medium)
+            {
+                return mainPage.Resources["MidEnergyBrush"];
+            }
+            if(energy == ClientLibrary.Energy.High)
+            {
+                return mainPage.Resources["HighEnergyBrush"];
+            }
+            return mainPage.Resources["LowEnergyBrush"];
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotSupportedException();
+        }
+    }
 }
