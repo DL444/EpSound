@@ -80,8 +80,39 @@ namespace EpSound
             else
             {
                 prevTag = tag;
+
+                if(tag == "Genres")
+                {
+                    Navigate(typeof(FilterPage.GenresPage));
+                }
+                else if(tag == "Moods")
+                {
+                    Navigate(typeof(FilterPage.MoodsPage));
+                }
+                else if(tag == "Movement")
+                {
+                    Navigate(typeof(FilterPage.MovementPage));
+                }
+                else if (tag == "Places")
+                {
+                    Navigate(typeof(FilterPage.PlacesPage));
+                }
+                else if (tag == "Misc")
+                {
+                    Navigate(typeof(FilterPage.MiscFilterPage));
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
                 FilterPaneVisibility = Visibility.Visible;
-                SetSelectPipeColor(prevTag);
+                SetSelectPipeColor(tag);
+            }
+
+            void Navigate(Type t)
+            {
+                FilterFrame.Navigate(t, filterParamMgr, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
             }
         }
 
@@ -110,17 +141,6 @@ namespace EpSound
             }
         }
 
-        private void NavigationViewItem_LosingFocus(UIElement sender, LosingFocusEventArgs args)
-        {
-            if(args.NewFocusedElement is UI.NavigationViewItem)
-            {
-                return;
-            }
-            prevTag = "";
-            FilterPaneVisibility = Visibility.Collapsed;
-            SetSelectPipeColor(prevTag);
-        }
-
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // TODO: Remove test code.
@@ -133,6 +153,13 @@ namespace EpSound
             {
                 TrackListView.DataContext = await ViewModel.ModelVmAdapter.SearchAll(args.QueryText);
             }
+        }
+
+        private void LightDismissHelper_Click(object sender, RoutedEventArgs e)
+        {
+            prevTag = "";
+            FilterPaneVisibility = Visibility.Collapsed;
+            SetSelectPipeColor(prevTag);
         }
     }
 

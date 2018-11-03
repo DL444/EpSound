@@ -113,29 +113,29 @@
 
         </Border>
 
-        <ui:NavigationView IsSettingsVisible="False" PaneDisplayMode="Top" HorizontalAlignment="Stretch" VerticalAlignment="Top" ItemInvoked="NavigationView_ItemInvoked">
+        <ui:NavigationView IsSettingsVisible="False" PaneDisplayMode="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemInvoked="NavigationView_ItemInvoked">
             <ui:NavigationView.Resources>
                 <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="{x:Bind SelectIndicatorColor, Mode=OneWay}"/>
             </ui:NavigationView.Resources>
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Icon="Audio" Content="Genres" Tag="Genres" LosingFocus="NavigationViewItem_LosingFocus"/>
-                <ui:NavigationViewItem Content="Moods" Tag="Moods" LosingFocus="NavigationViewItem_LosingFocus">
+                <ui:NavigationViewItem Icon="Audio" Content="Genres" Tag="Genres"/>
+                <ui:NavigationViewItem Content="Moods" Tag="Moods">
                     <ui:NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE706;"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="Movement" Tag="Movement" LosingFocus="NavigationViewItem_LosingFocus">
+                <ui:NavigationViewItem Content="Movement" Tag="Movement">
                     <ui:NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xF61F;"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem Content="Places" Tag="Places" LosingFocus="NavigationViewItem_LosingFocus">
+                <ui:NavigationViewItem Content="Places" Tag="Places">
                     <ui:NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE731;"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItemSeparator/>
-                <ui:NavigationViewItem Content="Miscellaneous" Tag="Misc" LosingFocus="NavigationViewItem_LosingFocus">
+                <ui:NavigationViewItem Content="Miscellaneous" Tag="Misc">
                     <ui:NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE9E9;"/>
                     </ui:NavigationViewItem.Icon>
@@ -146,35 +146,47 @@
                 <AutoSuggestBox QueryIcon="Find" Width="200" PlaceholderText="Search tracks" QuerySubmitted="AutoSuggestBox_QuerySubmitted" />
             </ui:NavigationView.AutoSuggestBox>
 
+            <Grid Visibility="{x:Bind FilterPaneVisibility, Mode=OneWay}" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Frame x:Name="FilterFrame" Height="200" Background="{ThemeResource NavigationViewTopPaneBackground}">
+                    <animation:Implicit.ShowAnimations>
+                        <animation:TranslationAnimation From="0,-200,0" To="0" Duration="0:0:0.3"/>
+                    </animation:Implicit.ShowAnimations>
+                    <animation:Implicit.HideAnimations>
+                        <animation:TranslationAnimation From="0" To="0,-200,0" Duration="0:0:0.1"/>
+                    </animation:Implicit.HideAnimations>
 
-            <Frame Height="200" Background="{ThemeResource NavigationViewTopPaneBackground}" Visibility="{x:Bind FilterPaneVisibility, Mode=OneWay}">
-                <animation:Implicit.ShowAnimations>
-                    <animation:TranslationAnimation From="0,-200,0" To="0" Duration="0:0:0.3"/>
-                </animation:Implicit.ShowAnimations>
-                <animation:Implicit.HideAnimations>
-                    <animation:TranslationAnimation From="0" To="0,-200,0" Duration="0:0:0.1"/>
-                </animation:Implicit.HideAnimations>
-
-                <Page>
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Rectangle Height="50" Width="50" Fill="Gold"/>
-                            <Rectangle Height="50" Width="50" Fill="ForestGreen" Grid.Row="1" Grid.Column="1"/>
-                            <Rectangle Height="50" Width="50" Fill="Gray" Grid.Row="2" Grid.Column="2"/>
+                    <Page>
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Height="50" Width="50" Fill="Gold"/>
+                                <Rectangle Height="50" Width="50" Fill="ForestGreen" Grid.Row="1" Grid.Column="1"/>
+                                <Rectangle Height="50" Width="50" Fill="Gray" Grid.Row="2" Grid.Column="2"/>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Page>
-            </Frame>
+                    </Page>
+                </Frame>
+                <Button x:Name="LightDismissHelper" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LightDismissHelper_Click">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Grid Background="Transparent"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
         </ui:NavigationView>
     </Grid>
 </Page>

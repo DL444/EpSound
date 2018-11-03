@@ -21,7 +21,7 @@ namespace EpSound.FilterPage
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MovementPage : Page, IFilterPage
+    public sealed partial class MovementPage : Page
     {
         public FilterParamMgrViewModel FilterManager { get; private set; }
 
@@ -29,9 +29,15 @@ namespace EpSound.FilterPage
         {
             this.InitializeComponent();
         }
-        public MovementPage(FilterParamMgrViewModel filterMgr) : this()
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            FilterManager = filterMgr;
+            base.OnNavigatedTo(e);
+            if (e.Parameter is FilterParamMgrViewModel mgr)
+            {
+                FilterManager = mgr;
+                DataContext = FilterManager;
+                FilterList.ItemsSource = FilterManager.MovementFilters;
+            }
         }
     }
 }

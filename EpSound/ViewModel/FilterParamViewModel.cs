@@ -29,14 +29,10 @@ namespace EpSound.ViewModel
 
         public bool IsEnabled { get; set; }
 
-        public Brush BackgroundBrush
+        public SolidColorBrush BackgroundBrush
         {
             get
             {
-                if(!IsEnabled)
-                {
-                    return (SolidColorBrush)App.Current.Resources["DisabledBrush"];
-                }
                 switch(TagType)
                 {
                     case FilterTagType.Genre:
