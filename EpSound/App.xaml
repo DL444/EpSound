@@ -6,7 +6,22 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <!--<AcrylicBrush x:Key="NavigationViewTopPaneBackground" BackgroundSource="HostBackdrop" TintColor="{StaticResource SystemChromeAltHighColor}" TintOpacity="0.6" FallbackColor="{StaticResource SystemChromeMediumLowColor}" />-->
+            <Color x:Key="GenresColor">#3559A1</Color>
+            <Color x:Key="MoodsColor">#FFB450</Color>
+            <Color x:Key="MovementColor">#EB2D46</Color>
+            <Color x:Key="PlacesColor">#028193</Color>
+            <Color x:Key="MiscColor">#8A2BEA</Color>
+            <SolidColorBrush x:Key="GenresBrush" Color="{StaticResource GenresColor}"/>
+            <SolidColorBrush x:Key="MoodsBrush" Color="{StaticResource MoodsColor}"/>
+            <SolidColorBrush x:Key="MovementBrush" Color="{StaticResource MovementColor}"/>
+            <SolidColorBrush x:Key="PlacesBrush" Color="{StaticResource PlacesColor}"/>
+            <SolidColorBrush x:Key="MiscBrush" Color="{StaticResource MiscColor}"/>
+            
+            <SolidColorBrush x:Key="DisabledBrush" Color="Gray"/>
+
+            <SolidColorBrush x:Key="LowEnergyBrush" Color="ForestGreen"/>
+            <SolidColorBrush x:Key="MidEnergyBrush" Color="Orange"/>
+            <SolidColorBrush x:Key="HighEnergyBrush" Color="OrangeRed"/>
 
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls"/>

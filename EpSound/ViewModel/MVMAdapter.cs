@@ -37,11 +37,28 @@ namespace EpSound.ViewModel
             return new FilterParamViewModel(param);
         }
 
+        public static FilterParamMgrViewModel CreateFilterParamMgrViewModel(IEnumerable<FilterParameter> parameters)
+        {
+            List<FilterParamViewModel> filters = new List<FilterParamViewModel>();
+            foreach(FilterParameter p in parameters)
+            {
+                filters.Add(CreateFilterParamViewModel(p));
+            }
+            return new FilterParamMgrViewModel(filters);
+        }
+
         public static async Task<TrackListViewModel> SearchAll(string term)
         {
             string str = await client.GetFullSearchListContent(term);
-            List<Track> tracks = ContentFormatter.GetFullSearchResultTracks(str, out _, out _);
+            IEnumerable<Track> tracks = ContentFormatter.GetFullSearchResultTracks(str, out _, out _);
             return CreateTrackListViewModel(tracks);
+        }
+
+        public static async Task<FilterParamMgrViewModel> GetFilterParameters()
+        {
+            string str = await client.GetFilterListContent();
+            IEnumerable<FilterParameter> paramList = ContentFormatter.GetFilterParameters(str);
+            return CreateFilterParamMgrViewModel(paramList);
         }
 
         public static async Task<TrackListViewModel> Test()

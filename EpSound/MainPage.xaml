@@ -21,50 +21,10 @@
         <local:DateDisplayConverter x:Key="DateDisplayFormatter"/>
         <local:EnergyBrushConverter x:Key="EnergyBrushConverter"/>
 
-        <Color x:Key="GenresColor">#3559A1</Color>
-        <Color x:Key="MoodsColor">#FFB450</Color>
-        <Color x:Key="MovementColor">#EB2D46</Color>
-        <Color x:Key="PlacesColor">#028193</Color>
-        <Color x:Key="MiscColor">#8A2BEA</Color>
-        <SolidColorBrush x:Key="GenresBrush" Color="{StaticResource GenresColor}"/>
-        <SolidColorBrush x:Key="MoodsBrush" Color="{StaticResource MoodsColor}"/>
-        <SolidColorBrush x:Key="MovementBrush" Color="{StaticResource MovementColor}"/>
-        <SolidColorBrush x:Key="PlacesBrush" Color="{StaticResource PlacesColor}"/>
-        <SolidColorBrush x:Key="MiscBrush" Color="{StaticResource MiscColor}"/>
-
-        <SolidColorBrush x:Key="LowEnergyBrush" Color="ForestGreen"/>
-        <SolidColorBrush x:Key="MidEnergyBrush" Color="Orange"/>
-        <SolidColorBrush x:Key="HighEnergyBrush" Color="OrangeRed"/>
     </Page.Resources>
 
     <Grid>
         <Grid>
-            <!--<ScrollViewer CanContentRenderOutsideBounds="True" >
-                <StackPanel>
-                    <Rectangle Fill="Blue" Height="100" Width="100"/>
-                    <Rectangle Fill="Red" Height="100" Width="100"/>
-                    <Rectangle Fill="Green" Height="100" Width="100"/>
-                    <Rectangle Fill="Yellow" Height="100" Width="100"/>
-                    <Rectangle Fill="Teal" Height="100" Width="100"/>
-                    <Rectangle Fill="Indigo" Height="100" Width="100"/>
-                    <Rectangle Fill="Blue" Height="100" Width="100"/>
-                    <Rectangle Fill="Red" Height="100" Width="100"/>
-                    <Rectangle Fill="Green" Height="100" Width="100"/>
-                    <Rectangle Fill="Yellow" Height="100" Width="100"/>
-                    <Rectangle Fill="Teal" Height="100" Width="100"/>
-                    <Rectangle Fill="Indigo" Height="100" Width="100"/>
-                    <Rectangle Fill="Blue" Height="100" Width="100"/>
-                    <Rectangle Fill="Red" Height="100" Width="100"/>
-                    <Rectangle Fill="Green" Height="100" Width="100"/>
-                    <Rectangle Fill="Yellow" Height="100" Width="100"/>
-                    <Rectangle Fill="Teal" Height="100" Width="100"/>
-                    <Rectangle Fill="Indigo" Height="100" Width="100"/>
-                    <devTools:FocusTracker Margin="0" IsActive="True"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Center" />
-                </StackPanel>
-            </ScrollViewer>-->
-
             <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,56,16,16" ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True">
                 <ListView.DataContext>
                     <vm:TrackListViewModel/>
@@ -91,7 +51,7 @@
                         <TextBlock Text="Genres" FontWeight="SemiBold" Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2" Foreground="{StaticResource GenresBrush}"/>
                         <TextBlock Text="Moods" FontWeight="SemiBold" Grid.Column="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2" Foreground="{StaticResource MoodsBrush}"/>
                         <TextBlock Text="BPM" FontWeight="SemiBold" Grid.Column="3" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2" Foreground="{StaticResource MiscBrush}"/>
-                        <TextBlock Text="Energy Leve" FontWeight="SemiBold" Grid.Column="4" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2" Foreground="{StaticResource MiscBrush}"/>
+                        <TextBlock Text="Energy Level" FontWeight="SemiBold" Grid.Column="4" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2" Foreground="{StaticResource MiscBrush}"/>
                         <TextBlock Text="Release Time" FontWeight="SemiBold" Grid.Column="5" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2"/>
                     </Grid>
                 </ListView.Header>
@@ -210,7 +170,7 @@
                             </Grid.ColumnDefinitions>
                             <Rectangle Height="50" Width="50" Fill="Gold"/>
                             <Rectangle Height="50" Width="50" Fill="ForestGreen" Grid.Row="1" Grid.Column="1"/>
-                            <Rectangle Height="50" Width="50" Fill="DodgerBlue" Grid.Row="2" Grid.Column="2"/>
+                            <Rectangle Height="50" Width="50" Fill="Gray" Grid.Row="2" Grid.Column="2"/>
                         </Grid>
                     </Grid>
                 </Page>

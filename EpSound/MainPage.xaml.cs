@@ -28,6 +28,7 @@ namespace EpSound
     {
         private Visibility _filterPaneVisibility = Visibility.Collapsed;
         private string prevTag = "";
+        private ViewModel.FilterParamMgrViewModel filterParamMgr;
         Color _selectIndicatorColor = Colors.Transparent;
 
         public Color SelectIndicatorColor
@@ -53,6 +54,16 @@ namespace EpSound
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if(e.Parameter is ViewModel.FilterParamMgrViewModel mgr)
+            {
+                filterParamMgr = mgr;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -82,19 +93,19 @@ namespace EpSound
                     SelectIndicatorColor = Colors.Transparent;
                     break;
                 case "Genres":
-                    SelectIndicatorColor = (Color)Resources["GenresColor"];
+                    SelectIndicatorColor = (Color)App.Current.Resources["GenresColor"];
                     break;
                 case "Moods":
-                    SelectIndicatorColor = (Color)Resources["MoodsColor"];
+                    SelectIndicatorColor = (Color)App.Current.Resources["MoodsColor"];
                     break;
                 case "Movement":
-                    SelectIndicatorColor = (Color)Resources["MovementColor"];
+                    SelectIndicatorColor = (Color)App.Current.Resources["MovementColor"];
                     break;
                 case "Places":
-                    SelectIndicatorColor = (Color)Resources["PlacesColor"];
+                    SelectIndicatorColor = (Color)App.Current.Resources["PlacesColor"];
                     break;
                 case "Misc":
-                    SelectIndicatorColor = (Color)Resources["MiscColor"];
+                    SelectIndicatorColor = (Color)App.Current.Resources["MiscColor"];
                     break;
             }
         }
@@ -168,24 +179,18 @@ namespace EpSound
 
     public class EnergyBrushConverter : IValueConverter
     {
-        static Page mainPage;
-
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if(mainPage == null)
-            {
-                mainPage = (Window.Current.Content as Frame).Content as Page;
-            }
             ClientLibrary.Energy energy = (ClientLibrary.Energy)value;
             if (energy == ClientLibrary.Energy.Medium)
             {
-                return mainPage.Resources["MidEnergyBrush"];
+                return App.Current.Resources["MidEnergyBrush"];
             }
             if(energy == ClientLibrary.Energy.High)
             {
-                return mainPage.Resources["HighEnergyBrush"];
+                return App.Current.Resources["HighEnergyBrush"];
             }
-            return mainPage.Resources["LowEnergyBrush"];
+            return App.Current.Resources["LowEnergyBrush"];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

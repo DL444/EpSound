@@ -2,7 +2,7 @@
 
 namespace ClientLibrary
 {
-    public class Track
+    public class Track : IComparable<Track>
     {
         public int StreamId { get; set; }
         public string Title { get; set; }
@@ -12,6 +12,11 @@ namespace ClientLibrary
         public int Bpm { get; set; }
         public Energy Energy { get; set; }
         public DateTime ReleaseDate { get; set; }
+
+        public int CompareTo(Track other)
+        {
+            return Title.CompareTo(other.Title);
+        }
 
         public override string ToString()
         {

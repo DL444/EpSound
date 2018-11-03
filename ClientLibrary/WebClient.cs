@@ -128,6 +128,7 @@ namespace ClientLibrary
                 }
                 tracks.Add(track);
             }
+            tracks.Sort();
             return tracks;
         }
 
@@ -434,6 +435,7 @@ namespace ClientLibrary
                     }
                 }
             }
+            tracks.Sort();
             return tracks;
         }
 
