@@ -54,6 +54,12 @@ namespace EpSound.ViewModel
             return CreateTrackListViewModel(tracks);
         }
 
+        public static async Task<TrackListViewModel> SearchAll(FilterParamMgrViewModel filterMgr)
+        {
+            List<Track> tracks = ContentFormatter.GetTracks(await client.GetTrackListContent(filterMgr.RequestString));
+            return CreateTrackListViewModel(tracks);
+        }
+
         public static async Task<FilterParamMgrViewModel> GetFilterParameters()
         {
             string str = await client.GetFilterListContent();

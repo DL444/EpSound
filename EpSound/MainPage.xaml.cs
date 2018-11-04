@@ -29,6 +29,8 @@ namespace EpSound
         private Visibility _filterPaneVisibility = Visibility.Collapsed;
         private string prevTag = "";
         private ViewModel.FilterParamMgrViewModel filterParamMgr;
+        bool optionChanged;
+
         Color _selectIndicatorColor = Colors.Transparent;
 
         public Color SelectIndicatorColor
@@ -63,19 +65,23 @@ namespace EpSound
             if(e.Parameter is ViewModel.FilterParamMgrViewModel mgr)
             {
                 filterParamMgr = mgr;
+                filterParamMgr.FilterOptionChanged += FilterParamMgr_FilterOptionChanged;
             }
+        }
+
+        private void FilterParamMgr_FilterOptionChanged(object sender, EventArgs e)
+        {
+            optionChanged = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NavigationView_ItemInvoked(UI.NavigationView sender, UI.NavigationViewItemInvokedEventArgs args)
+        private async void NavigationView_ItemInvoked(UI.NavigationView sender, UI.NavigationViewItemInvokedEventArgs args)
         {
             string tag = args.InvokedItemContainer.Tag as string;
             if (tag == prevTag)
             {
-                prevTag = "";
-                FilterPaneVisibility = Visibility.Collapsed;
-                SetSelectPipeColor(prevTag);
+                await CompleteSelection();
             }
             else
             {
@@ -112,7 +118,7 @@ namespace EpSound
 
             void Navigate(Type t)
             {
-                FilterFrame.Navigate(t, filterParamMgr, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
+                FilterFrame.Navigate(t, filterParamMgr, new Windows.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo());
             }
         }
 
@@ -155,11 +161,21 @@ namespace EpSound
             }
         }
 
-        private void LightDismissHelper_Click(object sender, RoutedEventArgs e)
+        private async void LightDismissHelper_Click(object sender, RoutedEventArgs e)
+        {
+            await CompleteSelection();
+        }
+
+        private async System.Threading.Tasks.Task CompleteSelection()
         {
             prevTag = "";
             FilterPaneVisibility = Visibility.Collapsed;
             SetSelectPipeColor(prevTag);
+            if (optionChanged)
+            {
+                TrackListView.DataContext = await ViewModel.ModelVmAdapter.SearchAll(filterParamMgr);
+                optionChanged = false;
+            }
         }
     }
 

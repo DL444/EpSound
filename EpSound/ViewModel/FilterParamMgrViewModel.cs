@@ -9,6 +9,8 @@ namespace EpSound.ViewModel
 {
     public class FilterParamMgrViewModel
     {
+        ClientLibrary.FilterParameterManager manager = new ClientLibrary.FilterParameterManager();
+
         public FilterParamMgrViewModel() { }
 
         public FilterParamMgrViewModel(IEnumerable<FilterParamViewModel> filters)
@@ -39,16 +41,34 @@ namespace EpSound.ViewModel
                         LengthFilters.Add(f);
                         break;
                 }
+                f.FilterChanged += Filter_FilterChanged;
             }
         }
 
-        public ObservableCollection<FilterParamViewModel> GenresFilters = new ObservableCollection<FilterParamViewModel>();
-        public ObservableCollection<FilterParamViewModel> MoodsFilters = new ObservableCollection<FilterParamViewModel>();
-        public ObservableCollection<FilterParamViewModel> MovementFilters = new ObservableCollection<FilterParamViewModel>();
-        public ObservableCollection<FilterParamViewModel> PlacesFilters = new ObservableCollection<FilterParamViewModel>();
+        public string RequestString => manager.GetRequestString();
 
-        public ObservableCollection<FilterParamViewModel> EnergyFilters = new ObservableCollection<FilterParamViewModel>();
-        public ObservableCollection<FilterParamViewModel> TempoFilters = new ObservableCollection<FilterParamViewModel>();
-        public ObservableCollection<FilterParamViewModel> LengthFilters = new ObservableCollection<FilterParamViewModel>();
+        public ObservableCollection<FilterParamViewModel> GenresFilters { get; } = new ObservableCollection<FilterParamViewModel>();
+        public ObservableCollection<FilterParamViewModel> MoodsFilters { get; } = new ObservableCollection<FilterParamViewModel>();
+        public ObservableCollection<FilterParamViewModel> MovementFilters { get; } = new ObservableCollection<FilterParamViewModel>();
+        public ObservableCollection<FilterParamViewModel> PlacesFilters { get; } = new ObservableCollection<FilterParamViewModel>();
+
+        public ObservableCollection<FilterParamViewModel> EnergyFilters { get; } = new ObservableCollection<FilterParamViewModel>();
+        public ObservableCollection<FilterParamViewModel> TempoFilters { get; } = new ObservableCollection<FilterParamViewModel>();
+        public ObservableCollection<FilterParamViewModel> LengthFilters { get; } = new ObservableCollection<FilterParamViewModel>();
+
+        public event EventHandler FilterOptionChanged;
+
+        private void Filter_FilterChanged(object sender, FilterChangedEventArgs e)
+        {
+            if (e.Filter.IsEnabled)
+            {
+                manager.Add(e.Filter.Parameter);
+            }
+            else
+            {
+                manager.Remove(e.Filter.Parameter);
+            }
+            FilterOptionChanged?.Invoke(this, null);
+        }
     }
 }

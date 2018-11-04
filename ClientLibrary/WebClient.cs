@@ -22,8 +22,12 @@ namespace ClientLibrary
 
         public async Task<string> GetTrackListContent(IEnumerable<FilterParameter> filterParameters)
         {
-            FilterParameterManager manager = new FilterParameterManager(filterParameters);
-            string paramStr = "/browse_data/?" + manager.GetRequestString();
+            return await GetTrackListContent(new FilterParameterManager(filterParameters).GetRequestString());
+        }
+
+        public async Task<string> GetTrackListContent(string requestString)
+        {
+            string paramStr = "/browse_data/?" + requestString;
             HttpResponseMessage message = await httpClient.GetAsync(paramStr);
             return await message.Content.ReadAsStringAsync();
         }

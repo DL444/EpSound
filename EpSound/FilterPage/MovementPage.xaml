@@ -13,7 +13,7 @@
     </Page.DataContext>
 
     <Grid>
-        <GridView x:Name="FilterList" ItemsSource="{Binding MovementFilters}" ItemTemplate="{StaticResource FilterItemTemplate}">
+        <GridView x:Name="FilterList" ItemsSource="{Binding MovementFilters}" ItemTemplate="{StaticResource FilterItemTemplate}" ScrollViewer.VerticalScrollMode="Disabled">
             <ItemsControl.ItemContainerTransitions>
                 <TransitionCollection>
                     <AddDeleteThemeTransition/>

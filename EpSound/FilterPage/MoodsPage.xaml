@@ -13,7 +13,7 @@
         <vm:FilterParamMgrViewModel/>
     </Page.DataContext>
     <Grid>
-        <GridView x:Name="FilterList" ItemsSource="{Binding MoodsFilters}" ItemTemplate="{StaticResource FilterItemTemplate}">
+        <GridView x:Name="FilterList" ItemsSource="{Binding MoodsFilters}" ItemTemplate="{StaticResource FilterItemTemplate}" ScrollViewer.VerticalScrollMode="Disabled">
             <ItemsControl.ItemContainerTransitions>
                 <TransitionCollection>
                     <AddDeleteThemeTransition/>

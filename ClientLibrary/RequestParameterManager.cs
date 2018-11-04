@@ -19,7 +19,10 @@ namespace ClientLibrary
         public void Add(FilterParameter parameter)
         {
             if (parameter == null) { throw new ArgumentNullException(nameof(parameter)); }
-            parameters.Add(parameter);
+            if(!parameters.Contains(parameter))
+            {
+                parameters.Add(parameter);
+            }
         }
         public void Remove(FilterParameter parameter)
         {

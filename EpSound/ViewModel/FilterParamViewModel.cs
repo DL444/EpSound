@@ -12,6 +12,7 @@ namespace EpSound.ViewModel
     public class FilterParamViewModel : INotifyPropertyChanged
     {
         FilterParameter _param;
+        bool _isEnabled;
 
         public FilterParameter Parameter
         {
@@ -27,7 +28,15 @@ namespace EpSound.ViewModel
         public FilterTagType TagType { get; private set; }
         public string DisplayName => Parameter.DisplayName;
 
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                _isEnabled = value;
+                FilterChanged?.Invoke(this, new FilterChangedEventArgs(this));
+            }
+        }
 
         public SolidColorBrush BackgroundBrush
         {
@@ -61,6 +70,7 @@ namespace EpSound.ViewModel
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<FilterChangedEventArgs> FilterChanged;
 
         static FilterTagType GetTagType(FilterParameter param)
         {
@@ -93,5 +103,14 @@ namespace EpSound.ViewModel
     public enum FilterTagType
     {
         Placeholder, Mood, Movement, Setting, Genre, Subgenre, Energy, Tempo, Length, Unknown
+    }
+
+    public class FilterChangedEventArgs : EventArgs
+    {
+        public FilterParamViewModel Filter { get; private set; }
+
+        public FilterChangedEventArgs(FilterParamViewModel filter) => Filter = filter;
+
+        public FilterChangedEventArgs() { }
     }
 }

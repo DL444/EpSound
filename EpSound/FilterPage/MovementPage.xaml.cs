@@ -36,7 +36,6 @@ namespace EpSound.FilterPage
             {
                 FilterManager = mgr;
                 DataContext = FilterManager;
-                FilterList.ItemsSource = FilterManager.MovementFilters;
             }
         }
     }

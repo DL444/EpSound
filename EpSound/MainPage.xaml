@@ -151,33 +151,13 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Frame x:Name="FilterFrame" Height="200" Background="{ThemeResource NavigationViewTopPaneBackground}">
+                <Frame x:Name="FilterFrame" MinHeight="200" Height="Auto" Padding="8" Background="{ThemeResource NavigationViewTopPaneBackground}">
                     <animation:Implicit.ShowAnimations>
                         <animation:TranslationAnimation From="0,-200,0" To="0" Duration="0:0:0.3"/>
                     </animation:Implicit.ShowAnimations>
                     <animation:Implicit.HideAnimations>
                         <animation:TranslationAnimation From="0" To="0,-200,0" Duration="0:0:0.1"/>
                     </animation:Implicit.HideAnimations>
-
-                    <Page>
-                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Rectangle Height="50" Width="50" Fill="Gold"/>
-                                <Rectangle Height="50" Width="50" Fill="ForestGreen" Grid.Row="1" Grid.Column="1"/>
-                                <Rectangle Height="50" Width="50" Fill="Gray" Grid.Row="2" Grid.Column="2"/>
-                            </Grid>
-                        </Grid>
-                    </Page>
                 </Frame>
                 <Button x:Name="LightDismissHelper" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LightDismissHelper_Click">
                     <Button.Template>
