@@ -452,7 +452,18 @@ namespace ClientLibrary
                 char current = original[j];
                 if (current == '<') { bracketCount++; continue; }
                 if (current == '>') { bracketCount--; continue; }
-                if (bracketCount == 0) { builder.Append(current); }
+                if (bracketCount == 0)
+                {
+                    if(trim)
+                    {
+                        if (char.IsWhiteSpace(current) && current != ' ') { continue; }
+                        if (builder.Length > 0 && current == ' ' && builder[builder.Length - 1] == ' ')
+                        {
+                            continue;
+                        }
+                    }
+                    builder.Append(current);
+                }
             }
             if(trim)
             {
