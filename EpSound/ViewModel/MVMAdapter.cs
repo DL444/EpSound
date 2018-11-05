@@ -66,6 +66,12 @@ namespace EpSound.ViewModel
             return ContentFormatter.GetTrackInfo(str);
         }
 
+        public static async Task<TrackListViewModel> GetSimilarTracks(Track track)
+        {
+            string str = await client.GetSimilarListContent(track.StreamId);
+            return CreateTrackListViewModel(ContentFormatter.GetTracks(str));
+        }
+
         public static async Task DownloadToStream(TrackInfo info, System.IO.Stream fileStream)
         {
             System.IO.Stream stream = await client.GetTrackStream(info);

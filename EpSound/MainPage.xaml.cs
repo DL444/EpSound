@@ -298,6 +298,20 @@ namespace EpSound
         }
         #endregion
 
+        #region Similar Tracks
+        private async void SimilarButton_Click(object sender, RoutedEventArgs e)
+        {
+            TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks(((sender as Button).DataContext as TrackViewModel).Track);
+        }
+
+        private async void SimilarMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (rightClickedTrack != null)
+            {
+                TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks(rightClickedTrack.Track);
+            }
+        }
+        #endregion
     }
 
     public class InvertBoolConverter : IValueConverter

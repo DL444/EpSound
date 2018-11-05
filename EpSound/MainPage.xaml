@@ -74,7 +74,7 @@
                                     <MenuFlyoutItem Icon="Play" Text="Play" Click="DownloadMenuFlyoutItem_Click"/>
                                     <MenuFlyoutItem Icon="Switch" Text="Stems"/>
                                     <MenuFlyoutItem Icon="Download" Text="Download" Click="DownloadMenuFlyoutItem_Click"/>
-                                    <MenuFlyoutItem Icon="Link" Text="Similar tracks"/>
+                                    <MenuFlyoutItem Icon="Link" Text="Similar tracks" Click="SimilarMenuFlyoutItem_Click"/>
                                 </MenuFlyout>
                             </Setter.Value>
                         </Setter>
@@ -176,7 +176,7 @@
                                             </ToolTipService.ToolTip>
                                             <SymbolIcon Symbol="Download"/>
                                         </Button>
-                                        <Button Style="{ThemeResource PaneToggleButtonStyle}">
+                                        <Button Style="{ThemeResource PaneToggleButtonStyle}" Click="SimilarButton_Click">
                                             <ToolTipService.ToolTip>
                                                 <ToolTip Content="Similar"/>
                                             </ToolTipService.ToolTip>
