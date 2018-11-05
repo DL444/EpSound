@@ -9,7 +9,7 @@
     xmlns:animation="using:Microsoft.Toolkit.Uwp.UI.Animations"
     xmlns:ui="using:Microsoft.UI.Xaml.Controls"
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
-    xmlns:devTools="using:Microsoft.Toolkit.Uwp.DeveloperTools"
+    xmlns:ext="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     xmlns:vm="using:EpSound.ViewModel"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -59,8 +59,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
-            <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,56,16,16" 
-                      ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True" KeyUp="TrackListView_KeyUp" ItemClick="TrackListView_ItemClick">
+            <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,46,16,16" 
+                      ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True" 
+                      KeyUp="TrackListView_KeyUp" ItemClick="TrackListView_ItemClick" ext:ListViewExtensions.AlternateColor="#33AAAAAA">
                 <ListView.DataContext>
                     <vm:TrackListViewModel/>
                 </ListView.DataContext>
@@ -68,10 +69,11 @@
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Padding" Value="0"/>
                         <Setter Property="ContextFlyout">
                             <Setter.Value>
                                 <MenuFlyout Opening="MenuFlyout_Opening">
-                                    <MenuFlyoutItem Icon="Play" Text="Play" Click="DownloadMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Space"/>
+                                    <MenuFlyoutItem Icon="Play" Text="Play" Click="PlayMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Space"/>
                                     <MenuFlyoutItem Icon="Switch" Text="Stems" KeyboardAcceleratorTextOverride="Alt+T"/>
                                     <MenuFlyoutItem Icon="Download" Text="Download" Click="DownloadMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Alt+S"/>
                                     <MenuFlyoutItem Icon="Link" Text="Similar tracks" Click="SimilarMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Alt+M"/>
@@ -82,7 +84,7 @@
                 </ListView.ItemContainerStyle>
 
                 <ListView.Header>
-                    <Grid Margin="20,8">
+                    <Grid Margin="8,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
@@ -104,100 +106,121 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:TrackViewModel">
                         <UserControl PointerEntered="TrackListItem_PointerEntered" PointerExited="TrackListItem_PointerExited">
-                            <Grid Padding="8" Background="Transparent">
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup>
-                                        <VisualState x:Name="Default">
-                                            <VisualState.StateTriggers>
-                                                <AdaptiveTrigger MinWindowWidth="1008"/>
-                                            </VisualState.StateTriggers>
-                                            <VisualState.Setters/>
-                                        </VisualState>
-                                        <VisualState x:Name="Compact">
-                                            <VisualState.StateTriggers>
-                                                <AdaptiveTrigger MinWindowWidth="641"/>
-                                            </VisualState.StateTriggers>
-                                            <VisualState.Setters>
-                                                <Setter Target="RelTimeCol.Width" Value="0"/>
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                        <VisualState x:Name="Minimal">
-                                            <VisualState.StateTriggers>
-                                                <AdaptiveTrigger MinWindowHeight="0"/>
-                                            </VisualState.StateTriggers>
-                                            <VisualState.Setters>
-                                                <Setter Target="RelTimeCol.Width" Value="0"/>
-                                                <Setter Target="BmpCol.Width" Value="0"/>
-                                                <Setter Target="EnergyCol.Width" Value="0"/>
-                                            </VisualState.Setters>
-                                        </VisualState>
-                                    </VisualStateGroup>
-                                </VisualStateManager.VisualStateGroups>
+                            <UserControl.Resources>
+                                <SymbolIconSource x:Key="StemsIconSource" Symbol="Switch"/>
+                                <SymbolIconSource x:Key="DownloadIconSource" Symbol="Download"/>
+                                <SymbolIconSource x:Key="SimilarIconSource" Symbol="Link"/>
+                                <SwipeItems x:Key="RowSwipeItems" Mode="Reveal">
+                                    <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{StaticResource GenresBrush}"/>
+                                    <SwipeItem IconSource="{StaticResource DownloadIconSource}" Text="Download" Background="{StaticResource MoodsBrush}"/>
+                                    <SwipeItem IconSource="{StaticResource SimilarIconSource}" Text="Similar" Background="{StaticResource MovementBrush}"/>
+                                </SwipeItems>
+                            </UserControl.Resources>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition x:Name="BmpCol" Width="1*"/>
-                                    <ColumnDefinition x:Name="EnergyCol" Width="1*"/>
-                                    <ColumnDefinition x:Name="RelTimeCol" Width="1*"/>
-                                </Grid.ColumnDefinitions>
+                            <SwipeControl HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <SwipeControl.RightItems>
+                                    <SwipeItems Mode="Reveal">
+                                        <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{StaticResource GenresBrush}" Foreground="White"/>
+                                        <SwipeItem IconSource="{StaticResource DownloadIconSource}" Text="Download" Background="{StaticResource PlacesBrush}" Foreground="White"/>
+                                        <SwipeItem IconSource="{StaticResource SimilarIconSource}" Text="Similar" Background="{StaticResource MiscBrush}" Foreground="White"/>
+                                    </SwipeItems>
+                                </SwipeControl.RightItems>
 
-                                <Grid>
+                                <Grid Padding="8" Background="Transparent">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup>
+                                            <VisualState x:Name="Default">
+                                                <VisualState.StateTriggers>
+                                                    <AdaptiveTrigger MinWindowWidth="1008"/>
+                                                </VisualState.StateTriggers>
+                                                <VisualState.Setters/>
+                                            </VisualState>
+                                            <VisualState x:Name="Compact">
+                                                <VisualState.StateTriggers>
+                                                    <AdaptiveTrigger MinWindowWidth="641"/>
+                                                </VisualState.StateTriggers>
+                                                <VisualState.Setters>
+                                                    <Setter Target="RelTimeCol.Width" Value="0"/>
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="Minimal">
+                                                <VisualState.StateTriggers>
+                                                    <AdaptiveTrigger MinWindowHeight="0"/>
+                                                </VisualState.StateTriggers>
+                                                <VisualState.Setters>
+                                                    <Setter Target="RelTimeCol.Width" Value="0"/>
+                                                    <Setter Target="BmpCol.Width" Value="0"/>
+                                                    <Setter Target="EnergyCol.Width" Value="0"/>
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition x:Name="BmpCol" Width="1*"/>
+                                        <ColumnDefinition x:Name="EnergyCol" Width="1*"/>
+                                        <ColumnDefinition x:Name="RelTimeCol" Width="1*"/>
                                     </Grid.ColumnDefinitions>
-                                    
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Title}" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="2">
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Title}" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="2">
                                             <ToolTipService.ToolTip>
                                                 <ToolTip Content="{Binding Title}"/>
                                             </ToolTipService.ToolTip>
-                                        </TextBlock>
-                                        
-                                        <TextBlock Text="{Binding Authors}" Style="{ThemeResource CaptionTextBlockStyle}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="2">
+                                            </TextBlock>
+
+                                            <TextBlock Text="{Binding Authors}" Style="{ThemeResource CaptionTextBlockStyle}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="2">
                                             <ToolTipService.ToolTip>
                                                 <ToolTip Content="{Binding Authors}"/>
                                             </ToolTipService.ToolTip>
-                                        </TextBlock>
-                                    </StackPanel>
+                                            </TextBlock>
+                                        </StackPanel>
 
-                                    <StackPanel x:Name="HoverControl" Orientation="Horizontal" Margin="8,0" Grid.Column="1" Visibility="{Binding IsHovered}">
-                                        <Button Style="{ThemeResource PaneToggleButtonStyle}">
-                                            <ToolTipService.ToolTip>
-                                                <ToolTip Content="Stems"/>
-                                            </ToolTipService.ToolTip>
-                                            <SymbolIcon Symbol="Switch"/>
-                                        </Button>
-                                        <Button Style="{ThemeResource PaneToggleButtonStyle}" Click="DownloadButton_Click">
-                                            <ToolTipService.ToolTip>
-                                                <ToolTip Content="Download"/>
-                                            </ToolTipService.ToolTip>
-                                            <SymbolIcon Symbol="Download"/>
-                                        </Button>
-                                        <Button Style="{ThemeResource PaneToggleButtonStyle}" Click="SimilarButton_Click">
-                                            <ToolTipService.ToolTip>
-                                                <ToolTip Content="Similar"/>
-                                            </ToolTipService.ToolTip>
-                                            <SymbolIcon Symbol="Link"/>
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                                <TextBlock Text="{Binding Genres}" Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2">
+                                        <StackPanel x:Name="HoverControl" Orientation="Horizontal" Margin="8,0" Grid.Column="1" Visibility="{Binding IsHovered}">
+                                            <Button Style="{ThemeResource PaneToggleButtonStyle}" Background="Transparent">
+                                                <ToolTipService.ToolTip>
+                                                    <ToolTip Content="Stems"/>
+                                                </ToolTipService.ToolTip>
+                                                <SymbolIcon Symbol="Switch"/>
+                                            </Button>
+                                            <Button Style="{ThemeResource PaneToggleButtonStyle}" Background="Transparent" Click="DownloadButton_Click">
+                                                <ToolTipService.ToolTip>
+                                                    <ToolTip Content="Download"/>
+                                                </ToolTipService.ToolTip>
+                                                <SymbolIcon Symbol="Download"/>
+                                            </Button>
+                                            <Button Style="{ThemeResource PaneToggleButtonStyle}" Background="Transparent" Click="SimilarButton_Click">
+                                                <ToolTipService.ToolTip>
+                                                    <ToolTip Content="Similar"/>
+                                                </ToolTipService.ToolTip>
+                                                <SymbolIcon Symbol="Link"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Genres}" Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2">
                                     <ToolTipService.ToolTip>
                                         <ToolTip Content="{Binding Genres}"/>
                                     </ToolTipService.ToolTip>
-                                </TextBlock>
-                                <TextBlock Text="{Binding Category}" Grid.Column="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2">
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Category}" Grid.Column="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2">
                                     <ToolTipService.ToolTip>
                                         <ToolTip Content="{Binding Category}"/>
                                     </ToolTipService.ToolTip>
-                                </TextBlock>
-                                <TextBlock Text="{Binding Bpm}" Grid.Column="3" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2"/>
-                                <TextBlock Text="{Binding Energy}" Grid.Column="4" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2" Foreground="{Binding Energy, Converter={StaticResource EnergyBrushConverter}}"/>
-                                <TextBlock Text="{Binding ReleaseTime, Converter={StaticResource DateDisplayFormatter}}" Grid.Column="5" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2"/>
-                            </Grid>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Bpm}" Grid.Column="3" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2"/>
+                                    <TextBlock Text="{Binding Energy}" Grid.Column="4" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2" Foreground="{Binding Energy, Converter={StaticResource EnergyBrushConverter}}"/>
+                                    <TextBlock Text="{Binding ReleaseTime, Converter={StaticResource DateDisplayFormatter}}" Grid.Column="5" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2"/>
+                                </Grid>
+                            </SwipeControl>
                         </UserControl>
                     </DataTemplate>
                 </ListView.ItemTemplate>
