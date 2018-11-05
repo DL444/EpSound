@@ -71,9 +71,9 @@
                         <Setter Property="ContextFlyout">
                             <Setter.Value>
                                 <MenuFlyout Opening="MenuFlyout_Opening">
-                                    <MenuFlyoutItem Icon="Play" Text="Play" Click="PlayMenuFlyoutItem_Click"/>
+                                    <MenuFlyoutItem Icon="Play" Text="Play" Click="DownloadMenuFlyoutItem_Click"/>
                                     <MenuFlyoutItem Icon="Switch" Text="Stems"/>
-                                    <MenuFlyoutItem Icon="Download" Text="Download"/>
+                                    <MenuFlyoutItem Icon="Download" Text="Download" Click="DownloadMenuFlyoutItem_Click"/>
                                     <MenuFlyoutItem Icon="Link" Text="Similar tracks"/>
                                 </MenuFlyout>
                             </Setter.Value>
@@ -170,7 +170,7 @@
                                             </ToolTipService.ToolTip>
                                             <SymbolIcon Symbol="Switch"/>
                                         </Button>
-                                        <Button Style="{ThemeResource PaneToggleButtonStyle}">
+                                        <Button Style="{ThemeResource PaneToggleButtonStyle}" Click="DownloadButton_Click">
                                             <ToolTipService.ToolTip>
                                                 <ToolTip Content="Download"/>
                                             </ToolTipService.ToolTip>

@@ -66,6 +66,12 @@ namespace EpSound.ViewModel
             return ContentFormatter.GetTrackInfo(str);
         }
 
+        public static async Task DownloadToStream(TrackInfo info, System.IO.Stream fileStream)
+        {
+            System.IO.Stream stream = await client.GetTrackStream(info);
+            await stream.CopyToAsync(fileStream);
+        }
+
         public static async Task<FilterParamMgrViewModel> GetFilterParameters()
         {
             string str = await client.GetFilterListContent();

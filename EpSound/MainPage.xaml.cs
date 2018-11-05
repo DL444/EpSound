@@ -199,19 +199,26 @@ namespace EpSound
                 filter.IsHovered = false;
             }
         }
-        private async void TrackListView_KeyUp(object sender, KeyRoutedEventArgs e)
+
+        private void MenuFlyout_Opening(object sender, object e)
         {
-            if(e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
-            {
-                ClientLibrary.Track track = ((TrackViewModel)((ListViewItem)e.OriginalSource).Content).Track;
-                await PlayMedia(track);
-            }
+            rightClickedTrack = ((sender as MenuFlyout).Target as ListViewItem).Content as TrackViewModel;
         }
 
+        #region Play Media
         private async Task PlayMedia(ClientLibrary.Track track)
         {
             // TODO: Implement custom controls and play.
             TrackInfoViewModel info = ModelVmAdapter.CreateTrackInfoViewModel(await ModelVmAdapter.GetTrackInfo(track));
+        }
+
+        private async void TrackListView_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
+            {
+                ClientLibrary.Track track = ((TrackViewModel)((ListViewItem)e.OriginalSource).Content).Track;
+                await PlayMedia(track);
+            }
         }
 
         private async void TrackListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -226,11 +233,71 @@ namespace EpSound
                 await PlayMedia(rightClickedTrack.Track);
             }
         }
+        #endregion
 
-        private void MenuFlyout_Opening(object sender, object e)
+        #region Save Track
+        async Task<Windows.Storage.StorageFile> InvokeSavePicker(string suggestedName)
         {
-            rightClickedTrack = ((sender as MenuFlyout).Target as ListViewItem).Content as TrackViewModel;
+            string name = suggestedName;
+            foreach(char c in Path.GetInvalidFileNameChars())
+            {
+                suggestedName.Replace(c, ' ');
+            }
+
+            Windows.Storage.Pickers.FileSavePicker picker = new Windows.Storage.Pickers.FileSavePicker();
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.MusicLibrary;
+            picker.FileTypeChoices.Add("MP3 Files", new List<string>() { ".mp3" });
+            picker.SuggestedFileName = name;
+
+            return await picker.PickSaveFileAsync();
         }
+        async Task<bool> SaveTrack(ClientLibrary.Track track)
+        {
+            Windows.Storage.StorageFile file = await InvokeSavePicker(track.Title);
+            if(file != null)
+            {
+                ClientLibrary.TrackInfo info = await ModelVmAdapter.GetTrackInfo(track);
+                Windows.Storage.CachedFileManager.DeferUpdates(file);
+                using (Stream str = await file.OpenStreamForWriteAsync())
+                {
+                    await ModelVmAdapter.DownloadToStream(info, str);
+                }
+                Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                if(status == Windows.Storage.Provider.FileUpdateStatus.Failed || status == Windows.Storage.Provider.FileUpdateStatus.Incomplete)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private async Task SaveTrackWrapper(ClientLibrary.Track track)
+        {
+            bool success = await SaveTrack(track);
+            if (!success)
+            {
+                ContentDialog dialog = new ContentDialog
+                {
+                    Title = "Download failed",
+                    Content = "Please check your Internet connection, \nor try to save to another location.",
+                    CloseButtonText = "OK"
+                };
+                await dialog.ShowAsync();
+            }
+        }
+
+        private async void DownloadMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (rightClickedTrack != null)
+            {
+                await SaveTrackWrapper(rightClickedTrack.Track);
+            }
+        }
+        private async void DownloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            await SaveTrackWrapper(((sender as Button).DataContext as TrackViewModel).Track);
+        }
+        #endregion
+
     }
 
     public class InvertBoolConverter : IValueConverter
