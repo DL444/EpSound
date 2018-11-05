@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Globalization.DateTimeFormatting;
+using Windows.Media.Core;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,6 +17,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using UI = Microsoft.UI.Xaml.Controls;
+using EpSound.ViewModel;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -30,6 +33,7 @@ namespace EpSound
         private string prevTag = "";
         private ViewModel.FilterParamMgrViewModel filterParamMgr;
         bool optionChanged;
+        TrackViewModel rightClickedTrack;
 
         Color _selectIndicatorColor = Colors.Transparent;
 
@@ -166,7 +170,7 @@ namespace EpSound
             await CompleteSelection();
         }
 
-        private async System.Threading.Tasks.Task CompleteSelection()
+        private async Task CompleteSelection()
         {
             prevTag = "";
             FilterPaneVisibility = Visibility.Collapsed;
@@ -180,20 +184,52 @@ namespace EpSound
 
         private void TrackListItem_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            ViewModel.TrackViewModel filter = (sender as FrameworkElement).DataContext as ViewModel.TrackViewModel;
-            filter.IsHovered = true;
+            if(e.Pointer.PointerDeviceType != Windows.Devices.Input.PointerDeviceType.Touch)
+            {
+                ViewModel.TrackViewModel filter = (sender as FrameworkElement).DataContext as ViewModel.TrackViewModel;
+                filter.IsHovered = true;
+            }
         }
 
         private void TrackListItem_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            ViewModel.TrackViewModel filter = (sender as FrameworkElement).DataContext as ViewModel.TrackViewModel;
-            filter.IsHovered = false;
+            if (e.Pointer.PointerDeviceType != Windows.Devices.Input.PointerDeviceType.Touch)
+            {
+                ViewModel.TrackViewModel filter = (sender as FrameworkElement).DataContext as ViewModel.TrackViewModel;
+                filter.IsHovered = false;
+            }
+        }
+        private async void TrackListView_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if(e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
+            {
+                ClientLibrary.Track track = ((TrackViewModel)((ListViewItem)e.OriginalSource).Content).Track;
+                await PlayMedia(track);
+            }
         }
 
-        private void TrackListView_KeyUp(object sender, KeyRoutedEventArgs e)
+        private async Task PlayMedia(ClientLibrary.Track track)
         {
-            // TODO: Implement play.
-            // Get TrackViewModel from e.OriginalSource.Content
+            // TODO: Implement custom controls and play.
+            TrackInfoViewModel info = ModelVmAdapter.CreateTrackInfoViewModel(await ModelVmAdapter.GetTrackInfo(track));
+        }
+
+        private async void TrackListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            await PlayMedia((e.ClickedItem as TrackViewModel).Track);
+        }
+
+        private async void PlayMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            if(rightClickedTrack != null)
+            {
+                await PlayMedia(rightClickedTrack.Track);
+            }
+        }
+
+        private void MenuFlyout_Opening(object sender, object e)
+        {
+            rightClickedTrack = ((sender as MenuFlyout).Target as ListViewItem).Content as TrackViewModel;
         }
     }
 

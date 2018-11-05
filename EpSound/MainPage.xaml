@@ -54,9 +54,13 @@
         </VisualStateManager.VisualStateGroups>
 
         <Grid>
-
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
             <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,56,16,16" 
-                      ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True" KeyUp="TrackListView_KeyUp">
+                      ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True" KeyUp="TrackListView_KeyUp" ItemClick="TrackListView_ItemClick">
                 <ListView.DataContext>
                     <vm:TrackListViewModel/>
                 </ListView.DataContext>
@@ -66,8 +70,9 @@
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         <Setter Property="ContextFlyout">
                             <Setter.Value>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem Icon="Play" Text="Play"/>
+                                <MenuFlyout Opening="MenuFlyout_Opening">
+                                    <MenuFlyoutItem Icon="Play" Text="Play" Click="PlayMenuFlyoutItem_Click"/>
+                                    <MenuFlyoutItem Icon="Switch" Text="Stems"/>
                                     <MenuFlyoutItem Icon="Download" Text="Download"/>
                                     <MenuFlyoutItem Icon="Link" Text="Similar tracks"/>
                                 </MenuFlyout>
@@ -99,7 +104,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:TrackViewModel">
                         <UserControl PointerEntered="TrackListItem_PointerEntered" PointerExited="TrackListItem_PointerExited">
-                            <Grid Margin="8" Background="Transparent">
+                            <Grid Padding="8" Background="Transparent">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup>
                                         <VisualState x:Name="Default">
@@ -160,9 +165,21 @@
 
                                     <StackPanel x:Name="HoverControl" Orientation="Horizontal" Margin="8,0" Grid.Column="1" Visibility="{Binding IsHovered}">
                                         <Button Style="{ThemeResource PaneToggleButtonStyle}">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip Content="Stems"/>
+                                            </ToolTipService.ToolTip>
+                                            <SymbolIcon Symbol="Switch"/>
+                                        </Button>
+                                        <Button Style="{ThemeResource PaneToggleButtonStyle}">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip Content="Download"/>
+                                            </ToolTipService.ToolTip>
                                             <SymbolIcon Symbol="Download"/>
                                         </Button>
                                         <Button Style="{ThemeResource PaneToggleButtonStyle}">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip Content="Similar"/>
+                                            </ToolTipService.ToolTip>
                                             <SymbolIcon Symbol="Link"/>
                                         </Button>
                                     </StackPanel>
@@ -185,6 +202,10 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <Grid Grid.Row="1">
+                
+            </Grid>
         </Grid>
 
         <Border Visibility="{x:Bind FilterPaneVisibility, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

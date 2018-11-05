@@ -60,6 +60,12 @@ namespace EpSound.ViewModel
             return CreateTrackListViewModel(tracks);
         }
 
+        public static async Task<TrackInfo> GetTrackInfo(Track track)
+        {
+            string str = await client.GetTrackInfoContent(track.StreamId);
+            return ContentFormatter.GetTrackInfo(str);
+        }
+
         public static async Task<FilterParamMgrViewModel> GetFilterParameters()
         {
             string str = await client.GetFilterListContent();
