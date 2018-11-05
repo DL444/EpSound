@@ -71,10 +71,10 @@
                         <Setter Property="ContextFlyout">
                             <Setter.Value>
                                 <MenuFlyout Opening="MenuFlyout_Opening">
-                                    <MenuFlyoutItem Icon="Play" Text="Play" Click="DownloadMenuFlyoutItem_Click"/>
-                                    <MenuFlyoutItem Icon="Switch" Text="Stems"/>
-                                    <MenuFlyoutItem Icon="Download" Text="Download" Click="DownloadMenuFlyoutItem_Click"/>
-                                    <MenuFlyoutItem Icon="Link" Text="Similar tracks" Click="SimilarMenuFlyoutItem_Click"/>
+                                    <MenuFlyoutItem Icon="Play" Text="Play" Click="DownloadMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Space"/>
+                                    <MenuFlyoutItem Icon="Switch" Text="Stems" KeyboardAcceleratorTextOverride="Alt+T"/>
+                                    <MenuFlyoutItem Icon="Download" Text="Download" Click="DownloadMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Alt+S"/>
+                                    <MenuFlyoutItem Icon="Link" Text="Similar tracks" Click="SimilarMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Alt+M"/>
                                 </MenuFlyout>
                             </Setter.Value>
                         </Setter>

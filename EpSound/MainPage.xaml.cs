@@ -214,10 +214,25 @@ namespace EpSound
 
         private async void TrackListView_KeyUp(object sender, KeyRoutedEventArgs e)
         {
+            bool altDown = Windows.UI.Core.CoreWindow.GetForCurrentThread().GetKeyState(Windows.System.VirtualKey.Menu) 
+                != Windows.UI.Core.CoreVirtualKeyStates.None;
+            ClientLibrary.Track track = ((TrackViewModel)((ListViewItem)e.OriginalSource).Content).Track;
+
             if (e.Key == Windows.System.VirtualKey.Enter || e.Key == Windows.System.VirtualKey.Space)
             {
-                ClientLibrary.Track track = ((TrackViewModel)((ListViewItem)e.OriginalSource).Content).Track;
                 await PlayMedia(track);
+            }
+            else if(e.Key == Windows.System.VirtualKey.T && altDown)
+            {
+                // TODO: Add stems command here.
+            }
+            else if(e.Key == Windows.System.VirtualKey.S && altDown)
+            {
+                await SaveTrackWrapper(track);
+            }
+            else if(e.Key == Windows.System.VirtualKey.M && altDown)
+            {
+                TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks(track);
             }
         }
 
