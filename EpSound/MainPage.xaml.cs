@@ -177,6 +177,24 @@ namespace EpSound
                 optionChanged = false;
             }
         }
+
+        private void TrackListItem_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            ViewModel.TrackViewModel filter = (sender as FrameworkElement).DataContext as ViewModel.TrackViewModel;
+            filter.IsHovered = true;
+        }
+
+        private void TrackListItem_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            ViewModel.TrackViewModel filter = (sender as FrameworkElement).DataContext as ViewModel.TrackViewModel;
+            filter.IsHovered = false;
+        }
+
+        private void TrackListView_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            // TODO: Implement play.
+            // Get TrackViewModel from e.OriginalSource.Content
+        }
     }
 
     public class InvertBoolConverter : IValueConverter

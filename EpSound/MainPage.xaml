@@ -55,7 +55,8 @@
 
         <Grid>
 
-            <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,56,16,16" ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True">
+            <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,56,16,16" 
+                      ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True" KeyUp="TrackListView_KeyUp">
                 <ListView.DataContext>
                     <vm:TrackListViewModel/>
                 </ListView.DataContext>
@@ -63,6 +64,15 @@
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="ContextFlyout">
+                            <Setter.Value>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Icon="Play" Text="Play"/>
+                                    <MenuFlyoutItem Icon="Download" Text="Download"/>
+                                    <MenuFlyoutItem Icon="Link" Text="Similar tracks"/>
+                                </MenuFlyout>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListView.ItemContainerStyle>
 
@@ -88,8 +98,8 @@
 
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:TrackViewModel">
-                        <UserControl>
-                            <Grid Margin="8">
+                        <UserControl PointerEntered="TrackListItem_PointerEntered" PointerExited="TrackListItem_PointerExited">
+                            <Grid Margin="8" Background="Transparent">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup>
                                         <VisualState x:Name="Default">
@@ -128,18 +138,35 @@
                                     <ColumnDefinition x:Name="RelTimeCol" Width="1*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Title}" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="2">
-                                    <ToolTipService.ToolTip>
-                                        <ToolTip Content="{Binding Title}"/>
-                                    </ToolTipService.ToolTip>
-                                    </TextBlock>
-                                    <TextBlock Text="{Binding Authors}" Style="{ThemeResource CaptionTextBlockStyle}" TextTrimming="CharacterEllipsis" Margin="2">
-                                    <ToolTipService.ToolTip>
-                                        <ToolTip Content="{Binding Authors}"/>
-                                    </ToolTipService.ToolTip>
-                                    </TextBlock>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Title}" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="2">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip Content="{Binding Title}"/>
+                                            </ToolTipService.ToolTip>
+                                        </TextBlock>
+                                        
+                                        <TextBlock Text="{Binding Authors}" Style="{ThemeResource CaptionTextBlockStyle}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="2">
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip Content="{Binding Authors}"/>
+                                            </ToolTipService.ToolTip>
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <StackPanel x:Name="HoverControl" Orientation="Horizontal" Margin="8,0" Grid.Column="1" Visibility="{Binding IsHovered}">
+                                        <Button Style="{ThemeResource PaneToggleButtonStyle}">
+                                            <SymbolIcon Symbol="Download"/>
+                                        </Button>
+                                        <Button Style="{ThemeResource PaneToggleButtonStyle}">
+                                            <SymbolIcon Symbol="Link"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
                                 <TextBlock Text="{Binding Genres}" Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="2">
                                     <ToolTipService.ToolTip>
                                         <ToolTip Content="{Binding Genres}"/>

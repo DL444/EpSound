@@ -12,6 +12,7 @@ namespace EpSound.ViewModel
     public class TrackViewModel : INotifyPropertyChanged
     {
         Track _track;
+        bool _isHovered;
 
         public Track Track
         {
@@ -30,6 +31,16 @@ namespace EpSound.ViewModel
         public int Bpm => Track.Bpm;
         public Energy Energy => Track.Energy;
         public DateTime ReleaseTime => Track.ReleaseDate.Date;
+
+        public bool IsHovered
+        {
+            get => _isHovered;
+            set
+            {
+                _isHovered = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsHovered)));
+            }
+        }
 
         public TrackViewModel() : this(new Track()) { }
         public TrackViewModel(Track track)
