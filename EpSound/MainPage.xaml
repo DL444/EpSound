@@ -73,7 +73,7 @@
                             <Setter.Value>
                                 <MenuFlyout Opening="MenuFlyout_Opening">
                                     <MenuFlyoutItem Icon="Play" Text="Play" Click="PlayMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Space"/>
-                                    <MenuFlyoutItem Icon="Switch" Text="Stems" KeyboardAcceleratorTextOverride="Alt+T"/>
+                                    <MenuFlyoutItem Icon="Switch" Text="Stems" Click="StemMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Alt+T"/>
                                     <MenuFlyoutItem Icon="Download" Text="Download" Click="DownloadMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Alt+S"/>
                                     <MenuFlyoutItem Icon="Link" Text="Similar tracks" Click="SimilarMenuFlyoutItem_Click" KeyboardAcceleratorTextOverride="Alt+M"/>
                                 </MenuFlyout>
@@ -114,41 +114,43 @@
                             <SwipeControl HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <SwipeControl.RightItems>
                                     <SwipeItems Mode="Reveal">
-                                        <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{ThemeResource SystemAccentColorLight1Brush}" Foreground="White"/>
+                                        <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{ThemeResource SystemAccentColorLight1Brush}" Foreground="White" Invoked="StemSwipeItem_Invoked"/>
                                         <SwipeItem IconSource="{StaticResource DownloadIconSource}" Text="Download" Background="{ThemeResource SystemAccentColorBrush}" Foreground="White" Invoked="DownloadSwipeItem_Invoked"/>
                                         <SwipeItem IconSource="{StaticResource SimilarIconSource}" Text="Similar" Background="{ThemeResource SystemAccentColorDark1Brush}" Foreground="White" Invoked="SimilarSwipeItem_Invoked"/>
                                     </SwipeItems>
                                 </SwipeControl.RightItems>
 
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup>
+                                        <VisualState x:Name="Default">
+                                            <VisualState.StateTriggers>
+                                                <AdaptiveTrigger MinWindowWidth="1008"/>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters/>
+                                        </VisualState>
+                                        <VisualState x:Name="Compact">
+                                            <VisualState.StateTriggers>
+                                                <AdaptiveTrigger MinWindowWidth="641"/>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Target="RelTimeCol.Width" Value="0"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Minimal">
+                                            <VisualState.StateTriggers>
+                                                <AdaptiveTrigger MinWindowHeight="0"/>
+                                            </VisualState.StateTriggers>
+                                            <VisualState.Setters>
+                                                <Setter Target="RelTimeCol.Width" Value="0"/>
+                                                <Setter Target="BmpCol.Width" Value="0"/>
+                                                <Setter Target="EnergyCol.Width" Value="0"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+
+
                                 <Grid Padding="8" Background="Transparent">
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup>
-                                            <VisualState x:Name="Default">
-                                                <VisualState.StateTriggers>
-                                                    <AdaptiveTrigger MinWindowWidth="1008"/>
-                                                </VisualState.StateTriggers>
-                                                <VisualState.Setters/>
-                                            </VisualState>
-                                            <VisualState x:Name="Compact">
-                                                <VisualState.StateTriggers>
-                                                    <AdaptiveTrigger MinWindowWidth="641"/>
-                                                </VisualState.StateTriggers>
-                                                <VisualState.Setters>
-                                                    <Setter Target="RelTimeCol.Width" Value="0"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Minimal">
-                                                <VisualState.StateTriggers>
-                                                    <AdaptiveTrigger MinWindowHeight="0"/>
-                                                </VisualState.StateTriggers>
-                                                <VisualState.Setters>
-                                                    <Setter Target="RelTimeCol.Width" Value="0"/>
-                                                    <Setter Target="BmpCol.Width" Value="0"/>
-                                                    <Setter Target="EnergyCol.Width" Value="0"/>
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
 
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="2*"/>

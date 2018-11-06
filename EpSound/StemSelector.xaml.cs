@@ -36,7 +36,19 @@ namespace EpSound
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedStem)));
             }
         }
-        public SelectedAction Action { get; set; }
+
+        public ViewModel.TrackViewModel SelectedTrack
+        {
+            get
+            {
+                var t = new ViewModel.TrackViewModel(track.Track);
+                t.Track.StreamId = SelectedStem.StreamId;
+                t.Track.Title += $" ({SelectedStem.StemType})";
+                return t;
+            }
+        }
+
+        public SelectedAction Action { get; private set; }
 
         public StemSelector()
         {

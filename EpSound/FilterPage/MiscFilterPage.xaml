@@ -43,6 +43,7 @@
 
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
+                    <Setter Property="IsTabStop" Value="False"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
@@ -70,6 +71,7 @@
 
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
+                    <Setter Property="IsTabStop" Value="False"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
@@ -97,6 +99,7 @@
 
             <GridView.ItemContainerStyle>
                 <Style TargetType="GridViewItem">
+                    <Setter Property="IsTabStop" Value="False"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>

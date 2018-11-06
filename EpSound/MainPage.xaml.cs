@@ -211,6 +211,10 @@ namespace EpSound
             // TODO: Implement custom controls and play.
             TrackInfoViewModel info = ModelVmAdapter.CreateTrackInfoViewModel(await ModelVmAdapter.GetTrackInfo(track));
         }
+        private async Task PlayMedia(TrackViewModel trackVm)
+        {
+            await PlayMedia(trackVm.Track);
+        }
 
         private async void TrackListView_KeyUp(object sender, KeyRoutedEventArgs e)
         {
@@ -224,7 +228,7 @@ namespace EpSound
             }
             else if(e.Key == Windows.System.VirtualKey.T && altDown)
             {
-                // TODO: Add stems command here.
+                await StemWrapper(new TrackViewModel(track)); 
             }
             else if(e.Key == Windows.System.VirtualKey.S && altDown)
             {
@@ -336,12 +340,41 @@ namespace EpSound
         }
         #endregion
 
+        #region Stems
+        async Task StemWrapper(TrackViewModel trackVm)
+        {
+            StemSelector selector = new StemSelector(trackVm);
+            await selector.ShowAsync();
+            if(selector.Action == StemSelector.SelectedAction.Play)
+            {
+                TrackViewModel selectedTrack = selector.SelectedTrack;
+                await PlayMedia(selectedTrack);
+            }
+            else if(selector.Action == StemSelector.SelectedAction.Download)
+            {
+                TrackViewModel selectedTrack = selector.SelectedTrack;
+                await SaveTrackWrapper(selectedTrack.Track);
+            }
+        }
+
         private async void StemsButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement actions.
-            StemSelector selector = new StemSelector((sender as Button).DataContext as TrackViewModel);
-            await selector.ShowAsync();
+            await StemWrapper((sender as Button).DataContext as TrackViewModel);
         }
+
+        private async void StemMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (rightClickedTrack != null)
+            {
+                await StemWrapper(new TrackViewModel(rightClickedTrack.Track));
+            }
+        }
+
+        private async void StemSwipeItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+        {
+            await StemWrapper(args.SwipeControl.DataContext as TrackViewModel);
+        }
+        #endregion
     }
 
     public class InvertBoolConverter : IValueConverter
