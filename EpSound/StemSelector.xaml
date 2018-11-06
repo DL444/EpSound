@@ -12,7 +12,7 @@
         <local:BoolVisibilityInvertedConverter x:Key="BoolVisibilityInvertedConverter"/>
     </ContentDialog.Resources>
 
-    <Grid Height="250">
+    <Grid Height="250" Width="300">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
@@ -40,11 +40,26 @@
             </ListView.ItemTemplate>
         </ListView>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="1" Margin="0,8">
-            <Button Content="Play" Tag="1" IsEnabled="{x:Bind SelectedStem.IsAvailable, Mode=OneWay}" Margin="0,0,8,0" Click="Button_Click"/>
-            <Button Content="Download" Tag="2" IsEnabled="{x:Bind SelectedStem.IsAvailable, Mode=OneWay}" Click="Button_Click"/>
+            <Button Tag="1" IsEnabled="{x:Bind SelectedStem.IsAvailable, Mode=OneWay}" Margin="0,0,8,0" Click="Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Play" Margin="0,0,4,0"/>
+                    <TextBlock Text="Play"/>
+                </StackPanel>
+            </Button>
+            <Button Tag="2" IsEnabled="{x:Bind SelectedStem.IsAvailable, Mode=OneWay}" Click="Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Download" Margin="0,0,4,0"/>
+                    <TextBlock Text="Download"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Margin="0,8">
-            <Button Content="Close" Tag="0" Click="Button_Click"/>
+            <Button Tag="0" Click="Button_Click">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Cancel" Margin="0,0,4,0"/>
+                    <TextBlock Text="Close"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
 
         <Grid>

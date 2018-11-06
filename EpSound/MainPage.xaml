@@ -114,9 +114,9 @@
                             <SwipeControl HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <SwipeControl.RightItems>
                                     <SwipeItems Mode="Reveal">
-                                        <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{StaticResource GenresBrush}" Foreground="White"/>
-                                        <SwipeItem IconSource="{StaticResource DownloadIconSource}" Text="Download" Background="{StaticResource PlacesBrush}" Foreground="White" Invoked="DownloadSwipeItem_Invoked"/>
-                                        <SwipeItem IconSource="{StaticResource SimilarIconSource}" Text="Similar" Background="{StaticResource MiscBrush}" Foreground="White" Invoked="SimilarSwipeItem_Invoked"/>
+                                        <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{ThemeResource SystemAccentColorLight1Brush}" Foreground="White"/>
+                                        <SwipeItem IconSource="{StaticResource DownloadIconSource}" Text="Download" Background="{ThemeResource SystemAccentColorBrush}" Foreground="White" Invoked="DownloadSwipeItem_Invoked"/>
+                                        <SwipeItem IconSource="{StaticResource SimilarIconSource}" Text="Similar" Background="{ThemeResource SystemAccentColorDark1Brush}" Foreground="White" Invoked="SimilarSwipeItem_Invoked"/>
                                     </SwipeItems>
                                 </SwipeControl.RightItems>
 

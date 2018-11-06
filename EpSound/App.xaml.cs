@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.ViewManagement;
 
 namespace EpSound
 {
@@ -66,6 +67,12 @@ namespace EpSound
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
+                    var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                    titleBar.BackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColor"];
+                    titleBar.ButtonBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColor"];
+                    titleBar.ButtonHoverBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
+                    titleBar.ButtonPressedBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorDark1"];
+
                     rootFrame.Navigate(typeof(SplashScreen), e.Arguments);
                 }
                 // Ensure the current window is active

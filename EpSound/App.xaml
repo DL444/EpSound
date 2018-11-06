@@ -7,6 +7,13 @@
 
     <Application.Resources>
         <ResourceDictionary>
+            <Color x:Key="SystemAccentColor">#D7464B</Color>
+            <Color x:Key="SystemAccentColorLight1">#DA565B</Color>
+            <Color x:Key="SystemAccentColorDark1">#C44045</Color>
+            <SolidColorBrush x:Key="SystemAccentColorLight1Brush" Color="{ThemeResource SystemAccentColorLight1}"/>
+            <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{ThemeResource SystemAccentColor}"/>
+            <SolidColorBrush x:Key="SystemAccentColorDark1Brush" Color="{ThemeResource SystemAccentColorDark1}"/>
+
             <Color x:Key="GenresColor">#3559A1</Color>
             <Color x:Key="MoodsColor">#FFB450</Color>
             <Color x:Key="MovementColor">#EB2D46</Color>
