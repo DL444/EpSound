@@ -40,7 +40,7 @@ namespace ClientLibrary
 
         public async Task<string> GetTrackInfoContent(int streamId)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"/track_url/{streamId}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"/track_url/{streamId}/");
             request.Headers.Add("x-requested-with", "XMLHttpRequest");
             HttpResponseMessage message = await httpClient.SendAsync(request);
             return await message.Content.ReadAsStringAsync();
@@ -281,19 +281,31 @@ namespace ClientLibrary
                                     break;
                                 case "bassStreamingTrackId":
                                     info.BassStreamId = jsonReader.ReadAsInt32() ?? -1;
-                                    info.HasBass = true;
+                                    if(info.BassStreamId != 0)
+                                    {
+                                        info.HasBass = true;
+                                    }
                                     break;
                                 case "drumsStreamingTrackId":
                                     info.DrumsStreamId = jsonReader.ReadAsInt32() ?? -1;
-                                    info.HasDrums = true;
+                                    if (info.DrumsStreamId != 0)
+                                    {
+                                        info.HasDrums = true;
+                                    }
                                     break;
                                 case "instrumentsStreamingTrackId":
                                     info.InstrumentsStreamId = jsonReader.ReadAsInt32() ?? -1;
-                                    info.HasInstruments = true;
+                                    if (info.InstrumentsStreamId != 0)
+                                    {
+                                        info.HasInstruments = true;
+                                    }
                                     break;
                                 case "melodyStreamingTrackId":
                                     info.MelodyStreamId = jsonReader.ReadAsInt32() ?? -1;
-                                    info.HasMelody = true;
+                                    if (info.MelodyStreamId != 0)
+                                    {
+                                        info.HasMelody = true;
+                                    }
                                     break;
                                 case "hasVocals":
                                     info.HasVocals = jsonReader.ReadAsBoolean() ?? false;

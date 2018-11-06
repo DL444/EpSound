@@ -311,6 +311,10 @@ namespace EpSound
         {
             await SaveTrackWrapper(((sender as Button).DataContext as TrackViewModel).Track);
         }
+        private async void DownloadSwipeItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+        {
+            await SaveTrackWrapper((args.SwipeControl.DataContext as TrackViewModel).Track);
+        }
         #endregion
 
         #region Similar Tracks
@@ -326,7 +330,18 @@ namespace EpSound
                 TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks(rightClickedTrack.Track);
             }
         }
+        private async void SimilarSwipeItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
+        {
+            TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks((args.SwipeControl.DataContext as TrackViewModel).Track);
+        }
         #endregion
+
+        private async void StemsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Implement actions.
+            StemSelector selector = new StemSelector((sender as Button).DataContext as TrackViewModel);
+            await selector.ShowAsync();
+        }
     }
 
     public class InvertBoolConverter : IValueConverter
@@ -389,6 +404,60 @@ namespace EpSound
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotSupportedException();
+        }
+    }
+
+    public class BoolVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if((bool)value == true)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if ((Visibility)value == Visibility.Visible)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public class BoolVisibilityInvertedConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if ((bool)value == true)
+            {
+                return Visibility.Collapsed;
+            }
+            else
+            {
+                return Visibility.Visible;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if ((Visibility)value == Visibility.Visible)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

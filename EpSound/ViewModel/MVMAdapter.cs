@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +46,20 @@ namespace EpSound.ViewModel
                 filters.Add(CreateFilterParamViewModel(p));
             }
             return new FilterParamMgrViewModel(filters);
+        }
+
+        public static List<StemViewModel> CreateStemViewModels(TrackInfo info)
+        {
+            List<StemViewModel> stems = new List<StemViewModel>();
+            stems.Add(new StemViewModel(StemType.Melody, info.MelodyStreamId, info.HasMelody));
+            stems.Add(new StemViewModel(StemType.Instruments, info.InstrumentsStreamId, info.HasInstruments));
+            stems.Add(new StemViewModel(StemType.Base, info.BassStreamId, info.HasBass));
+            stems.Add(new StemViewModel(StemType.Drums, info.DrumsStreamId, info.HasDrums));
+            return stems;
+        }
+        public static List<StemViewModel> CreateStemViewModels(TrackInfoViewModel infoVm)
+        {
+            return CreateStemViewModels(infoVm.Info);
         }
 
         public static async Task<TrackListViewModel> SearchAll(string term)

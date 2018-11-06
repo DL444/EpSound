@@ -117,9 +117,13 @@
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StemSelector.xaml.cs">
+      <DependentUpon>StemSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\FilterParamMgrViewModel.cs" />
     <Compile Include="ViewModel\FilterParamViewModel.cs" />
     <Compile Include="ViewModel\MVMAdapter.cs" />
+    <Compile Include="ViewModel\StemViewModel.cs" />
     <Compile Include="ViewModel\TrackInfoViewModel.cs" />
     <Compile Include="ViewModel\TrackListViewModel.cs" />
     <Compile Include="ViewModel\TrackViewModel.cs" />
@@ -170,6 +174,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="SplashScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StemSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

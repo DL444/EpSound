@@ -26,9 +26,13 @@ namespace EpSound.ViewModel
         public string Authors => Info.Authors;
         public int Length => Info.Length;
         public bool HasBass => Info.HasBass;
+        public int BassStreamId => Info.BassStreamId;
         public bool HasDrums => Info.HasDrums;
+        public int DrumsStreamId => Info.DrumsStreamId; 
         public bool HasInstruments => Info.HasInstruments;
+        public int InstrumentsStreamId => Info.InstrumentsStreamId;
         public bool HasMelody => Info.HasMelody;
+        public int MelodyStreamId => Info.MelodyStreamId;
 
         public TrackInfoType InfoType => Info.TrackInfoType;
         public bool HasVocals => Info.HasVocals;

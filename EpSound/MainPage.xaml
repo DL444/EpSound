@@ -20,7 +20,6 @@
         <local:InvertVisibilityConverter x:Key="InvertVisibilityConverter"/>
         <local:DateDisplayConverter x:Key="DateDisplayFormatter"/>
         <local:EnergyBrushConverter x:Key="EnergyBrushConverter"/>
-
     </Page.Resources>
 
     <Grid>
@@ -110,19 +109,14 @@
                                 <SymbolIconSource x:Key="StemsIconSource" Symbol="Switch"/>
                                 <SymbolIconSource x:Key="DownloadIconSource" Symbol="Download"/>
                                 <SymbolIconSource x:Key="SimilarIconSource" Symbol="Link"/>
-                                <SwipeItems x:Key="RowSwipeItems" Mode="Reveal">
-                                    <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{StaticResource GenresBrush}"/>
-                                    <SwipeItem IconSource="{StaticResource DownloadIconSource}" Text="Download" Background="{StaticResource MoodsBrush}"/>
-                                    <SwipeItem IconSource="{StaticResource SimilarIconSource}" Text="Similar" Background="{StaticResource MovementBrush}"/>
-                                </SwipeItems>
                             </UserControl.Resources>
 
                             <SwipeControl HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <SwipeControl.RightItems>
                                     <SwipeItems Mode="Reveal">
                                         <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{StaticResource GenresBrush}" Foreground="White"/>
-                                        <SwipeItem IconSource="{StaticResource DownloadIconSource}" Text="Download" Background="{StaticResource PlacesBrush}" Foreground="White"/>
-                                        <SwipeItem IconSource="{StaticResource SimilarIconSource}" Text="Similar" Background="{StaticResource MiscBrush}" Foreground="White"/>
+                                        <SwipeItem IconSource="{StaticResource DownloadIconSource}" Text="Download" Background="{StaticResource PlacesBrush}" Foreground="White" Invoked="DownloadSwipeItem_Invoked"/>
+                                        <SwipeItem IconSource="{StaticResource SimilarIconSource}" Text="Similar" Background="{StaticResource MiscBrush}" Foreground="White" Invoked="SimilarSwipeItem_Invoked"/>
                                     </SwipeItems>
                                 </SwipeControl.RightItems>
 
@@ -186,7 +180,7 @@
                                         </StackPanel>
 
                                         <StackPanel x:Name="HoverControl" Orientation="Horizontal" Margin="8,0" Grid.Column="1" Visibility="{Binding IsHovered}">
-                                            <Button Style="{ThemeResource PaneToggleButtonStyle}" Background="Transparent">
+                                            <Button Style="{ThemeResource PaneToggleButtonStyle}" Background="Transparent" Click="StemsButton_Click">
                                                 <ToolTipService.ToolTip>
                                                     <ToolTip Content="Stems"/>
                                                 </ToolTipService.ToolTip>
@@ -291,7 +285,7 @@
                         <animation:TranslationAnimation From="0" To="0,-200,0" Duration="0:0:0.1"/>
                     </animation:Implicit.HideAnimations>
                 </Frame>
-                <Button x:Name="LightDismissHelper" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LightDismissHelper_Click">
+                <Button x:Name="LightDismissHelper" IsTabStop="False" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="LightDismissHelper_Click">
                     <Button.Template>
                         <ControlTemplate>
                             <Grid Background="Transparent"/>
