@@ -161,6 +161,7 @@ namespace EpSound
         {
             if(!string.IsNullOrEmpty(args.QueryText))
             {
+                // TODO: Filter panels have to be cleared. 
                 TrackListView.DataContext = await ViewModel.ModelVmAdapter.SearchAll(args.QueryText);
             }
         }
@@ -208,8 +209,23 @@ namespace EpSound
         #region Play Media
         private async Task PlayMedia(ClientLibrary.Track track)
         {
-            // TODO: Implement custom controls and play.
             TrackInfoViewModel info = ModelVmAdapter.CreateTrackInfoViewModel(await ModelVmAdapter.GetTrackInfo(track));
+            MediaSource source = MediaSource.CreateFromUri(new Uri(info.FileUri));
+
+            Windows.Media.Playback.MediaPlaybackItem playbackItem = new Windows.Media.Playback.MediaPlaybackItem(source);
+            Windows.Media.Playback.MediaItemDisplayProperties props = playbackItem.GetDisplayProperties();
+            props.Type = Windows.Media.MediaPlaybackType.Music;
+            props.MusicProperties.Title = info.Title;
+            props.MusicProperties.Artist = info.Authors;
+            props.MusicProperties.Genres.Add(track.Genres);
+            playbackItem.ApplyDisplayProperties(props);
+
+            MediaPlayer.Source = playbackItem;
+            MediaPlayer.MediaPlayer.AudioCategory = Windows.Media.Playback.MediaPlayerAudioCategory.Media;
+            MediaPlayer.Visibility = Visibility.Visible;
+            (MediaPlayer.TransportControls as MediaControl.EsMediaPlayer).Title = info.Title;
+            (MediaPlayer.TransportControls as MediaControl.EsMediaPlayer).Author = info.Authors;
+            MediaPlayer.MediaPlayer.Play();
         }
         private async Task PlayMedia(TrackViewModel trackVm)
         {

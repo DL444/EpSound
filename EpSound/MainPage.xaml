@@ -11,6 +11,7 @@
     xmlns:media="using:Microsoft.Toolkit.Uwp.UI.Media"
     xmlns:ext="using:Microsoft.Toolkit.Uwp.UI.Extensions"
     xmlns:vm="using:EpSound.ViewModel"
+    xmlns:player="using:EpSound.MediaControl"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Loaded="Page_Loaded">
@@ -58,9 +59,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
-            <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,46,16,16" 
+            <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,46,16,120" 
                       ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True" 
-                      KeyUp="TrackListView_KeyUp" ItemClick="TrackListView_ItemClick" ext:ListViewExtensions.AlternateColor="#33AAAAAA">
+                      KeyUp="TrackListView_KeyUp" ItemClick="TrackListView_ItemClick" ext:ListViewExtensions.AlternateColor="#33AAAAAA" Grid.RowSpan="2">
                 <ListView.DataContext>
                     <vm:TrackListViewModel/>
                 </ListView.DataContext>
@@ -83,7 +84,7 @@
                 </ListView.ItemContainerStyle>
 
                 <ListView.Header>
-                    <Grid Margin="8,12">
+                    <Grid Margin="16,12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
@@ -111,7 +112,7 @@
                                 <SymbolIconSource x:Key="SimilarIconSource" Symbol="Link"/>
                             </UserControl.Resources>
 
-                            <SwipeControl HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <SwipeControl HorizontalAlignment="Center" VerticalAlignment="Center" Padding="8,0">
                                 <SwipeControl.RightItems>
                                     <SwipeItems Mode="Reveal">
                                         <SwipeItem IconSource="{StaticResource StemsIconSource}" Text="Stems" Background="{ThemeResource SystemAccentColorLight1Brush}" Foreground="White" Invoked="StemSwipeItem_Invoked"/>
@@ -223,7 +224,11 @@
             </ListView>
 
             <Grid Grid.Row="1">
-                
+                <MediaPlayerElement x:Name="MediaPlayer" AreTransportControlsEnabled="True" Background="Transparent" IsEnabled="True" Visibility="Collapsed">
+                    <MediaPlayerElement.TransportControls>
+                        <player:EsMediaPlayer IsFullWindowButtonVisible="False" IsZoomButtonVisible="False" IsRepeatButtonVisible="True" IsRepeatEnabled="True" ShowAndHideAutomatically="False"/>
+                    </MediaPlayerElement.TransportControls>
+                </MediaPlayerElement>
             </Grid>
         </Grid>
 

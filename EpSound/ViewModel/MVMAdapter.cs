@@ -78,7 +78,9 @@ namespace EpSound.ViewModel
         public static async Task<TrackInfo> GetTrackInfo(Track track)
         {
             string str = await client.GetTrackInfoContent(track.StreamId);
-            return ContentFormatter.GetTrackInfo(str);
+            var info = ContentFormatter.GetTrackInfo(str);
+            info.Authors = track.Authors;
+            return info;
         }
 
         public static async Task<TrackListViewModel> GetSimilarTracks(Track track)

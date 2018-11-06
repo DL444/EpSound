@@ -63,7 +63,7 @@
         </StackPanel>
 
         <Grid>
-            <ProgressRing x:Name="ProgRing" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ProgressRing x:Name="ProgRing" Foreground="{ThemeResource SystemAccentColorBrush}" IsActive="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </Grid>
 </ContentDialog>
