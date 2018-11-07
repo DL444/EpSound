@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Windows.UI.ViewManagement;
 
 namespace EpSound
 {
@@ -68,22 +58,27 @@ namespace EpSound
                     // configuring the new page by passing required information as a navigation
                     // parameter
                     var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-                    titleBar.BackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColor"];
-                    titleBar.ButtonBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColor"];
-                    titleBar.InactiveBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
-                    titleBar.InactiveForegroundColor = Windows.UI.Colors.White;
-                    titleBar.ButtonInactiveBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
-                    titleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.White;
-                    titleBar.ButtonHoverBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
-                    titleBar.ButtonPressedBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorDark1"];
-                    titleBar.ButtonHoverForegroundColor = Windows.UI.Colors.White;
-                    titleBar.ButtonPressedForegroundColor = Windows.UI.Colors.White;
+                    SetTitleBarColor(titleBar);
 
                     rootFrame.Navigate(typeof(SplashScreen), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+        }
+
+        private static void SetTitleBarColor(ApplicationViewTitleBar titleBar)
+        {
+            titleBar.BackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColor"];
+            titleBar.ButtonBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColor"];
+            titleBar.InactiveBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
+            titleBar.InactiveForegroundColor = Windows.UI.Colors.White;
+            titleBar.ButtonInactiveBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
+            titleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.White;
+            titleBar.ButtonHoverBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
+            titleBar.ButtonPressedBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorDark1"];
+            titleBar.ButtonHoverForegroundColor = Windows.UI.Colors.White;
+            titleBar.ButtonPressedForegroundColor = Windows.UI.Colors.White;
         }
 
         /// <summary>

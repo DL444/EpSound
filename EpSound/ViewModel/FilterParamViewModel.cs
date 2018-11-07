@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ClientLibrary;
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClientLibrary;
 using Windows.UI.Xaml.Media;
 
 namespace EpSound.ViewModel
