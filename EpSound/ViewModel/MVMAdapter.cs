@@ -101,15 +101,5 @@ namespace EpSound.ViewModel
             IEnumerable<FilterParameter> paramList = ContentFormatter.GetFilterParameters(str);
             return CreateFilterParamMgrViewModel(paramList);
         }
-
-        public static async Task<TrackListViewModel> Test()
-        {
-            // TODO: Remove test code after implementation. 
-            FilterParameter hopefulParam = new MoodParameter() { Tag = "Moods.Hopeful", DisplayName = "Hopeful" };
-            FilterParameter highEParam = new EnergyParameter() { Tag = "Low", DisplayName = "Medium" };
-
-            List<Track> tracks = ContentFormatter.GetTracks(await client.GetTrackListContent(new List<FilterParameter>() { hopefulParam, /*highEParam*/ }));
-            return CreateTrackListViewModel(tracks);
-        }
     }
 }

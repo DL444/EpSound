@@ -31,8 +31,10 @@ namespace EpSound
     {
         private Visibility _filterPaneVisibility = Visibility.Collapsed;
         private string prevTag = "";
-        private ViewModel.FilterParamMgrViewModel filterParamMgr;
+        private FilterParamMgrViewModel filterParamMgr;
         bool optionChanged;
+        bool _noItem = true;
+        bool _loading;
         TrackViewModel rightClickedTrack;
 
         Color _selectIndicatorColor = Colors.Transparent;
@@ -56,6 +58,24 @@ namespace EpSound
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterPaneVisibility)));
             }
         }
+        public bool NoItem
+        {
+            get => _noItem;
+            set
+            {
+                _noItem = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NoItem)));
+            }
+        }
+        public bool IsLoading
+        {
+            get => _loading;
+            set
+            {
+                _loading = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+            }
+        }
 
         public MainPage()
         {
@@ -66,7 +86,7 @@ namespace EpSound
         {
             base.OnNavigatedTo(e);
 
-            if(e.Parameter is ViewModel.FilterParamMgrViewModel mgr)
+            if(e.Parameter is FilterParamMgrViewModel mgr)
             {
                 filterParamMgr = mgr;
                 filterParamMgr.FilterOptionChanged += FilterParamMgr_FilterOptionChanged;
@@ -151,19 +171,23 @@ namespace EpSound
             }
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            // TODO: Remove test code.
-            TrackListView.DataContext = await ViewModel.ModelVmAdapter.Test();
-        }
-
         private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if(!string.IsNullOrEmpty(args.QueryText))
             {
-                // TODO: Filter panels have to be cleared. 
-                TrackListView.DataContext = await ViewModel.ModelVmAdapter.SearchAll(args.QueryText);
+                filterParamMgr.Clear();
+                optionChanged = false;
+                IsLoading = true;
+                TrackListViewModel list = await ModelVmAdapter.SearchAll(args.QueryText);
+                IsLoading = false;
+                SetTrackList(list);
             }
+        }
+
+        private void SetTrackList(TrackListViewModel tracks)
+        {
+            TrackListView.DataContext = tracks;
+            NoItem = tracks.Tracks.Count == 0;
         }
 
         private async void LightDismissHelper_Click(object sender, RoutedEventArgs e)
@@ -178,7 +202,10 @@ namespace EpSound
             SetSelectPipeColor(prevTag);
             if (optionChanged)
             {
-                TrackListView.DataContext = await ViewModel.ModelVmAdapter.SearchAll(filterParamMgr);
+                IsLoading = true;
+                var list = await ModelVmAdapter.SearchAll(filterParamMgr);
+                IsLoading = false;
+                SetTrackList(list);
                 optionChanged = false;
             }
         }
@@ -223,6 +250,7 @@ namespace EpSound
             MediaPlayer.Source = playbackItem;
             MediaPlayer.MediaPlayer.AudioCategory = Windows.Media.Playback.MediaPlayerAudioCategory.Media;
             MediaPlayer.Visibility = Visibility.Visible;
+            TrackListView.Padding = new Thickness(16, 46, 16, 120);
             (MediaPlayer.TransportControls as MediaControl.EsMediaPlayer).Title = info.Title;
             (MediaPlayer.TransportControls as MediaControl.EsMediaPlayer).Author = info.Authors;
             MediaPlayer.MediaPlayer.Play();
@@ -252,7 +280,12 @@ namespace EpSound
             }
             else if(e.Key == Windows.System.VirtualKey.M && altDown)
             {
-                TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks(track);
+                filterParamMgr.Clear();
+                optionChanged = false;
+                IsLoading = true;
+                var list = await ModelVmAdapter.GetSimilarTracks(track);
+                IsLoading = false;
+                SetTrackList(list);
             }
         }
 
@@ -340,19 +373,34 @@ namespace EpSound
         #region Similar Tracks
         private async void SimilarButton_Click(object sender, RoutedEventArgs e)
         {
-            TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks(((sender as Button).DataContext as TrackViewModel).Track);
+            filterParamMgr.Clear();
+            optionChanged = false;
+            IsLoading = true;
+            var list = await ModelVmAdapter.GetSimilarTracks(((sender as Button).DataContext as TrackViewModel).Track);
+            IsLoading = false;
+            SetTrackList(list);
         }
 
         private async void SimilarMenuFlyoutItem_Click(object sender, RoutedEventArgs e)
         {
             if (rightClickedTrack != null)
             {
-                TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks(rightClickedTrack.Track);
+                filterParamMgr.Clear();
+                optionChanged = false;
+                IsLoading = true;
+                var list = await ModelVmAdapter.GetSimilarTracks(rightClickedTrack.Track);
+                IsLoading = false;
+                SetTrackList(list);
             }
         }
         private async void SimilarSwipeItem_Invoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
         {
-            TrackListView.DataContext = await ModelVmAdapter.GetSimilarTracks((args.SwipeControl.DataContext as TrackViewModel).Track);
+            filterParamMgr.Clear();
+            optionChanged = false;
+            IsLoading = true;
+            var list = await ModelVmAdapter.GetSimilarTracks((args.SwipeControl.DataContext as TrackViewModel).Track);
+            IsLoading = false;
+            SetTrackList(list);
         }
         #endregion
 

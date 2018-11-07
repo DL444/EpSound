@@ -15,6 +15,7 @@ namespace EpSound.ViewModel
 
         public FilterParamMgrViewModel(IEnumerable<FilterParamViewModel> filters)
         {
+            this.filters = filters.ToList();
             foreach(FilterParamViewModel f in filters)
             {
                 switch(f.TagType)
@@ -47,6 +48,8 @@ namespace EpSound.ViewModel
 
         public string RequestString => manager.GetRequestString();
 
+        List<FilterParamViewModel> filters = new List<FilterParamViewModel>();
+
         public ObservableCollection<FilterParamViewModel> GenresFilters { get; } = new ObservableCollection<FilterParamViewModel>();
         public ObservableCollection<FilterParamViewModel> MoodsFilters { get; } = new ObservableCollection<FilterParamViewModel>();
         public ObservableCollection<FilterParamViewModel> MovementFilters { get; } = new ObservableCollection<FilterParamViewModel>();
@@ -55,6 +58,15 @@ namespace EpSound.ViewModel
         public ObservableCollection<FilterParamViewModel> EnergyFilters { get; } = new ObservableCollection<FilterParamViewModel>();
         public ObservableCollection<FilterParamViewModel> TempoFilters { get; } = new ObservableCollection<FilterParamViewModel>();
         public ObservableCollection<FilterParamViewModel> LengthFilters { get; } = new ObservableCollection<FilterParamViewModel>();
+
+        public void Clear()
+        {
+            for(int i = 0; i < filters.Count; i++)
+            {
+                filters[i].IsEnabled = false;
+            }
+            manager.Clear();
+        }
 
         public event EventHandler FilterOptionChanged;
 

@@ -13,14 +13,14 @@
     xmlns:vm="using:EpSound.ViewModel"
     xmlns:player="using:EpSound.MediaControl"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Loaded="Page_Loaded">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
         <local:InvertBoolConverter x:Key="InvertBoolConverter"/>
         <local:InvertVisibilityConverter x:Key="InvertVisibilityConverter"/>
         <local:DateDisplayConverter x:Key="DateDisplayFormatter"/>
         <local:EnergyBrushConverter x:Key="EnergyBrushConverter"/>
+        <local:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
     </Page.Resources>
 
     <Grid>
@@ -59,7 +59,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
-            <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,46,16,120" 
+            <ListView x:Name="TrackListView" ItemsSource="{Binding Tracks}" HorizontalContentAlignment="Stretch" Padding="16,46,16,24" 
                       ScrollViewer.CanContentRenderOutsideBounds="True" SelectionMode="None" IsItemClickEnabled="True" 
                       KeyUp="TrackListView_KeyUp" ItemClick="TrackListView_ItemClick" ext:ListViewExtensions.AlternateColor="#33AAAAAA" Grid.RowSpan="2">
                 <ListView.DataContext>
@@ -223,6 +223,29 @@
                 </ListView.ItemTemplate>
             </ListView>
 
+            <Grid x:Name="NoItemPlaceholder" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind NoItem, Converter={StaticResource BoolVisibilityConverter}, Mode=OneWay}">
+                <StackPanel>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE1CB;" TextAlignment="Center" FontSize="40" Margin="16"/>
+                    <TextBlock Text="Change filters to see tracks!" TextAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+
+            <Border Visibility="{x:Bind IsLoading, Mode=OneWay, Converter={StaticResource BoolVisibilityConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <animation:Implicit.ShowAnimations>
+                    <animation:OpacityAnimation To="1" Duration="0:0:0.3"/>
+                </animation:Implicit.ShowAnimations>
+                <animation:Implicit.HideAnimations>
+                    <animation:OpacityAnimation To="0" Duration="0:0:0.3"/>
+                </animation:Implicit.HideAnimations>
+
+                <Border.Background>
+                    <media:BackdropBlurBrush Amount="5"/>
+                </Border.Background>
+                <Grid>
+                    <ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="{x:Bind IsLoading, Mode=OneWay}"/>
+                </Grid>
+            </Border>
+
             <Grid Grid.Row="1">
                 <MediaPlayerElement x:Name="MediaPlayer" AreTransportControlsEnabled="True" Background="Transparent" IsEnabled="True" Visibility="Collapsed">
                     <MediaPlayerElement.TransportControls>
@@ -232,8 +255,9 @@
             </Grid>
         </Grid>
 
+        <!--{x:Bind FilterPaneVisibility, Mode=OneWay}-->
         <Border Visibility="{x:Bind FilterPaneVisibility, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <animation:Implicit.ShowAnimations>
+                <animation:Implicit.ShowAnimations>
                 <animation:OpacityAnimation To="1" Duration="0:0:0.3"/>
             </animation:Implicit.ShowAnimations>
             <animation:Implicit.HideAnimations>
