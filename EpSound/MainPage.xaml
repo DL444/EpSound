@@ -226,7 +226,7 @@
             <Grid x:Name="NoItemPlaceholder" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{x:Bind NoItem, Converter={StaticResource BoolVisibilityConverter}, Mode=OneWay}">
                 <StackPanel>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE1CB;" TextAlignment="Center" FontSize="40" Margin="16"/>
-                    <TextBlock Text="Change filters to see tracks!" TextAlignment="Center"/>
+                    <TextBlock Text="Change filters to see tracks!" TextAlignment="Center" Style="{ThemeResource SubtitleTextBlockStyle}"/>
                 </StackPanel>
             </Grid>
 
@@ -242,7 +242,7 @@
                     <media:BackdropBlurBrush Amount="5"/>
                 </Border.Background>
                 <Grid>
-                    <ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="{x:Bind IsLoading, Mode=OneWay}"/>
+                    <ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="{x:Bind IsLoading, Mode=OneWay}" Height="40" Width="40"/>
                 </Grid>
             </Border>
 

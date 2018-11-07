@@ -70,8 +70,14 @@ namespace EpSound
                     var titleBar = ApplicationView.GetForCurrentView().TitleBar;
                     titleBar.BackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColor"];
                     titleBar.ButtonBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColor"];
+                    titleBar.InactiveBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
+                    titleBar.InactiveForegroundColor = Windows.UI.Colors.White;
+                    titleBar.ButtonInactiveBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
+                    titleBar.ButtonInactiveForegroundColor = Windows.UI.Colors.White;
                     titleBar.ButtonHoverBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorLight1"];
                     titleBar.ButtonPressedBackgroundColor = (Windows.UI.Color)App.Current.Resources["SystemAccentColorDark1"];
+                    titleBar.ButtonHoverForegroundColor = Windows.UI.Colors.White;
+                    titleBar.ButtonPressedForegroundColor = Windows.UI.Colors.White;
 
                     rootFrame.Navigate(typeof(SplashScreen), e.Arguments);
                 }

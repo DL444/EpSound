@@ -31,8 +31,36 @@ namespace EpSound
         {
             base.OnNavigatedTo(e);
 
-            ViewModel.FilterParamMgrViewModel filterMgr = await ViewModel.ModelVmAdapter.GetFilterParameters();
-            (Window.Current.Content as Frame).Navigate(typeof(MainPage), filterMgr);
+            await LoadFilters();
+        }
+
+        private async System.Threading.Tasks.Task LoadFilters()
+        {
+            ProgRing.Visibility = Visibility.Visible;
+            FailureBox.Visibility = Visibility.Collapsed;
+            for (int i = 0; ; i++)
+            {
+                try
+                {
+                    ViewModel.FilterParamMgrViewModel filterMgr = await ViewModel.ModelVmAdapter.GetFilterParameters();
+                    (Window.Current.Content as Frame).Navigate(typeof(MainPage), filterMgr);
+                    return;
+                }
+                catch (Exception)
+                {
+                    if (i > 4)
+                    {
+                        ProgRing.Visibility = Visibility.Collapsed;
+                        FailureBox.Visibility = Visibility.Visible;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private async void ReloadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await LoadFilters();
         }
     }
 }
