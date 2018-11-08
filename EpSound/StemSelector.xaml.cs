@@ -61,12 +61,20 @@ namespace EpSound
             {
                 track = new ViewModel.TrackViewModel();
             }
-            var stemsList = ViewModel.ModelVmAdapter.CreateStemViewModels(await ViewModel.ModelVmAdapter.GetTrackInfo(track.Track));
-            foreach(var s in stemsList)
+            try
             {
-                Stems.Add(s);
+                var stemsList = ViewModel.ModelVmAdapter.CreateStemViewModels(await ViewModel.ModelVmAdapter.GetTrackInfo(track.Track));
+                foreach (var s in stemsList)
+                {
+                    Stems.Add(s);
+                }
+                ProgRing.IsActive = false;
             }
-            ProgRing.IsActive = false;
+            catch(System.Exception)
+            {
+                FailureBox.Visibility = Visibility.Visible;
+                ProgRing.IsActive = false;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -255,6 +255,8 @@
             </Grid>
         </Grid>
 
+        <controls:InAppNotification x:Name="FailureNotification" Content="Connection failed. Please check your Internet connection." ShowDismissButton="True" VerticalOffset="100" AnimationDuration="0:0:0.2"/>
+
         <!--{x:Bind FilterPaneVisibility, Mode=OneWay}-->
         <Border Visibility="{x:Bind FilterPaneVisibility, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <animation:Implicit.ShowAnimations>
@@ -270,7 +272,7 @@
 
         </Border>
 
-        <ui:NavigationView IsSettingsVisible="False" PaneDisplayMode="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemInvoked="NavigationView_ItemInvoked">
+        <ui:NavigationView IsSettingsVisible="False" IsBackButtonVisible="Collapsed" PaneDisplayMode="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemInvoked="NavigationView_ItemInvoked">
             <ui:NavigationView.Resources>
                 <SolidColorBrush x:Key="NavigationViewSelectionIndicatorForeground" Color="{x:Bind SelectIndicatorColor, Mode=OneWay}"/>
             </ui:NavigationView.Resources>

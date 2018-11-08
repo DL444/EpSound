@@ -38,7 +38,7 @@ namespace EpSound
                 }
                 catch (Exception)
                 {
-                    if (i > 4)
+                    if (i > 2)
                     {
                         ProgRing.Visibility = Visibility.Collapsed;
                         FailureBox.Visibility = Visibility.Visible;

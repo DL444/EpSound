@@ -172,7 +172,17 @@ namespace EpSound
                 filterParamMgr.Clear();
                 optionChanged = false;
                 IsLoading = true;
-                TrackListViewModel list = await ModelVmAdapter.SearchAll(args.QueryText);
+                TrackListViewModel list;
+                try
+                {
+                    list = await ModelVmAdapter.SearchAll(args.QueryText);
+                }
+                catch(Exception)
+                {
+                    FailureNotification.Show(5000);
+                    IsLoading = false;
+                    return;
+                }
                 IsLoading = false;
                 SetTrackList(list);
             }
@@ -197,7 +207,17 @@ namespace EpSound
             if (optionChanged)
             {
                 IsLoading = true;
-                var list = await ModelVmAdapter.SearchAll(filterParamMgr);
+                TrackListViewModel list;
+                try
+                {
+                    list = await ModelVmAdapter.SearchAll(filterParamMgr);
+                }
+                catch(Exception)
+                {
+                    FailureNotification.Show(5000);
+                    IsLoading = false;
+                    return;
+                }
                 IsLoading = false;
                 SetTrackList(list);
                 optionChanged = false;
@@ -230,7 +250,19 @@ namespace EpSound
         #region Play Media
         private async Task PlayMedia(ClientLibrary.Track track)
         {
-            TrackInfoViewModel info = ModelVmAdapter.CreateTrackInfoViewModel(await ModelVmAdapter.GetTrackInfo(track));
+            ClientLibrary.TrackInfo trackInfo;
+            try
+            {
+                trackInfo = await ModelVmAdapter.GetTrackInfo(track);
+            }
+            catch(Exception)
+            {
+                (MediaPlayer.TransportControls as MediaControl.EsMediaPlayer).Title = "Connection failed";
+                (MediaPlayer.TransportControls as MediaControl.EsMediaPlayer).Author = "Check your Internet connection.";
+                MediaPlayer.Visibility = Visibility.Visible;
+                return;
+            }
+            TrackInfoViewModel info = ModelVmAdapter.CreateTrackInfoViewModel(trackInfo);
             MediaSource source = MediaSource.CreateFromUri(new Uri(info.FileUri));
 
             Windows.Media.Playback.MediaPlaybackItem playbackItem = new Windows.Media.Playback.MediaPlaybackItem(source);
@@ -277,7 +309,17 @@ namespace EpSound
                 filterParamMgr.Clear();
                 optionChanged = false;
                 IsLoading = true;
-                var list = await ModelVmAdapter.GetSimilarTracks(track);
+                TrackListViewModel list;
+                try
+                {
+                    list = await ModelVmAdapter.GetSimilarTracks(track);
+                }
+                catch (Exception)
+                {
+                    FailureNotification.Show(5000);
+                    IsLoading = false;
+                    return;
+                }
                 IsLoading = false;
                 SetTrackList(list);
             }
@@ -315,17 +357,33 @@ namespace EpSound
         }
         async Task<bool> SaveTrack(ClientLibrary.Track track)
         {
+            ClientLibrary.TrackInfo info;
+            try
+            {
+                info = await ModelVmAdapter.GetTrackInfo(track);
+            }
+            catch(Exception)
+            {
+                return false;
+            }
             Windows.Storage.StorageFile file = await InvokeSavePicker(track.Title);
             if(file != null)
             {
-                ClientLibrary.TrackInfo info = await ModelVmAdapter.GetTrackInfo(track);
-                Windows.Storage.CachedFileManager.DeferUpdates(file);
-                using (Stream str = await file.OpenStreamForWriteAsync())
+                try
                 {
-                    await ModelVmAdapter.DownloadToStream(info, str);
+                    
+                    Windows.Storage.CachedFileManager.DeferUpdates(file);
+                    using (Stream str = await file.OpenStreamForWriteAsync())
+                    {
+                        await ModelVmAdapter.DownloadToStream(info, str);
+                    }
+                    Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                    if (status == Windows.Storage.Provider.FileUpdateStatus.Failed || status == Windows.Storage.Provider.FileUpdateStatus.Incomplete)
+                    {
+                        return false;
+                    }
                 }
-                Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
-                if(status == Windows.Storage.Provider.FileUpdateStatus.Failed || status == Windows.Storage.Provider.FileUpdateStatus.Incomplete)
+                catch(Exception)
                 {
                     return false;
                 }
@@ -370,7 +428,17 @@ namespace EpSound
             filterParamMgr.Clear();
             optionChanged = false;
             IsLoading = true;
-            var list = await ModelVmAdapter.GetSimilarTracks(((sender as Button).DataContext as TrackViewModel).Track);
+            TrackListViewModel list;
+            try
+            {
+                list = await ModelVmAdapter.GetSimilarTracks(((sender as Button).DataContext as TrackViewModel).Track);
+            }
+            catch (Exception)
+            {
+                FailureNotification.Show(5000);
+                IsLoading = false;
+                return;
+            }
             IsLoading = false;
             SetTrackList(list);
         }
@@ -382,7 +450,17 @@ namespace EpSound
                 filterParamMgr.Clear();
                 optionChanged = false;
                 IsLoading = true;
-                var list = await ModelVmAdapter.GetSimilarTracks(rightClickedTrack.Track);
+                TrackListViewModel list;
+                try
+                {
+                    list = await ModelVmAdapter.GetSimilarTracks(rightClickedTrack.Track);
+                }
+                catch (Exception)
+                {
+                    FailureNotification.Show(5000);
+                    IsLoading = false;
+                    return;
+                }
                 IsLoading = false;
                 SetTrackList(list);
             }
@@ -392,7 +470,17 @@ namespace EpSound
             filterParamMgr.Clear();
             optionChanged = false;
             IsLoading = true;
-            var list = await ModelVmAdapter.GetSimilarTracks((args.SwipeControl.DataContext as TrackViewModel).Track);
+            TrackListViewModel list;
+            try
+            {
+                list = await ModelVmAdapter.GetSimilarTracks((args.SwipeControl.DataContext as TrackViewModel).Track);
+            }
+            catch (Exception)
+            {
+                FailureNotification.Show(5000);
+                IsLoading = false;
+                return;
+            }
             IsLoading = false;
             SetTrackList(list);
         }
