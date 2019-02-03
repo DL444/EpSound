@@ -18,6 +18,7 @@ namespace ClientLibrary
         {
             httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(baseUri);
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36 Edge/18.17763");
         }
 
         public async Task<string> GetTrackListContent(IEnumerable<FilterParameter> filterParameters)
@@ -27,7 +28,7 @@ namespace ClientLibrary
 
         public async Task<string> GetTrackListContent(string requestString)
         {
-            string paramStr = "/browse_data/?" + requestString;
+            string paramStr = "/browse_data/" + requestString;
             HttpResponseMessage message = await httpClient.GetAsync(paramStr);
             return await message.Content.ReadAsStringAsync();
         }
